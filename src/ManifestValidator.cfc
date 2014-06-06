@@ -39,12 +39,64 @@ component output=false {
 
 // private helpers
 	private void function _validateAssetDefinition( required string key, required any definition ) output=false {
-		if ( !IsStruct( arguments.definition ) ) {
+		var def = arguments.definition;
+
+		if ( !IsStruct( def ) ) {
 			throw( 
 				  type    = "Sticker.badManifest"
 				, message = "Invalid asset definition in manifest. Asset definitions must be a JSON object"
-				, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( arguments.definition )#]" 
+				, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
 			);	
+		}
+
+		if ( !def.keyExists( "url" ) && !def.keyExists( "path" ) ) {
+			throw( 
+				  type    = "Sticker.badManifest"
+				, message = "Invalid asset definition in manifest. Each asset definition should contain either a [url] or [path] element"
+				, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+			);	
+		}
+
+		if ( def.keyExists( "url" ) && def.keyExists( "path" ) ) {
+			throw( 
+				  type    = "Sticker.badManifest"
+				, message = "Invalid asset definition in manifest. Each asset definition should contain *either* a [url] or [path] element, not both"
+				, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+			);	
+		}
+
+		if ( def.keyExists( "url" ) ) {
+			if ( !IsSimpleValue( def.url ) ) {
+				throw( 
+					  type    = "Sticker.badManifest"
+					, message = "Invalid asset definition in manifest. Asset URL is not a string"
+					, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+				);	
+			}
+			if ( !Len( Trim( def.url ) ) ) {
+				throw( 
+					  type    = "Sticker.badManifest"
+					, message = "Invalid asset definition in manifest. Asset URL is empty"
+					, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+				);		
+			}
+		}
+
+		if ( def.keyExists( "path" ) ) {
+			if ( !IsSimpleValue( def.path ) ) {
+				throw( 
+					  type    = "Sticker.badManifest"
+					, message = "Invalid asset definition in manifest. Asset path is not a string"
+					, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+				);	
+			}
+			if ( !Len( Trim( def.path ) ) ) {
+				throw( 
+					  type    = "Sticker.badManifest"
+					, message = "Invalid asset definition in manifest. Asset path is empty"
+					, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+				);		
+			}
 		}
 	}
 }
