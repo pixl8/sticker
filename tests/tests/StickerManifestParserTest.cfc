@@ -4,6 +4,7 @@ component extends="testbox.system.testing.BaseSpec"{
 
 	// executes before all suites+specs in the run() method
 	function beforeAll(){
+		variables.manifestParser = new sticker.StickerManifestParser();
 	}
 
 	// executes after all suites+specs in the run() method
@@ -13,7 +14,13 @@ component extends="testbox.system.testing.BaseSpec"{
 /*********************************** BDD SUITES ***********************************/
 
 	function run(){
-		// all your suites go here.
+		describe( "parseManifests()", function(){
+			it( "should throw useful error when input is invalid JSON", function(){
+				expect( function(){
+					manifestParser.parseManifests( [ '{ "valid":"json here" }', 'i {am not valid JSON' ] );
+				}).toThrow( type="Sticker.badManifest", regex="Invalid json" );
+			});
+		});
 	}
 	
 }
