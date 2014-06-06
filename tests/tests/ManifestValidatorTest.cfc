@@ -69,6 +69,24 @@ component extends="testbox.system.testing.BaseSpec"{
 					validator.validate( '{ "somekey":{ "path":"/some/path",type:"js" }, "anotherkey":{"path":"", "type":"css"}}' );
 				}).toThrow( type="Sticker.badManifest", regex="invalid asset definition.*?Asset path is empty" );
 			} );
+
+			it( "should throw useful error when asset definition does not have a type element", function(){
+				expect( function(){
+					validator.validate( '{ "somekey":{ "path":"/some/path",type:"js" }, "anotherkey":{"url":"http//www.google.com"}}' );
+				}).toThrow( type="Sticker.badManifest", regex="invalid asset definition.*?Each asset definition must have a \[type\] element" );
+			} );
+
+			it( "should throw useful error when asset definition's type element is not a string", function(){
+				expect( function(){
+					validator.validate( '{ "somekey":{ "path":"/some/path",type:{} }, "anotherkey":{"url":"http//www.google.com", "type":"css"}}' );
+				}).toThrow( type="Sticker.badManifest", regex="invalid asset definition.*?Type must be equal to either 'css' or 'js'" );
+			} );
+
+			it( "should throw useful error when asset definition's type element is not equal to either 'js' or 'css'", function(){
+				expect( function(){
+					validator.validate( '{ "somekey":{ "path":"/some/path",type:"whatever" }, "anotherkey":{"url":"http//www.google.com", "type":"css"}}' );
+				}).toThrow( type="Sticker.badManifest", regex="invalid asset definition.*?Type must be equal to either 'css' or 'js'" );
+			} );
 		});
 	}
 	

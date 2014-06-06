@@ -98,5 +98,21 @@ component output=false {
 				);		
 			}
 		}
+
+		if ( !def.keyExists( "type" ) ) {
+			throw( 
+				  type    = "Sticker.badManifest"
+				, message = "Invalid asset definition in manifest. Each asset definition must have a [type] element"
+				, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+			);
+		}
+
+		if ( !IsSimpleValue( def.type ) || !ListFindNoCase( "css,js", def.type ) ) {
+			throw( 
+				  type    = "Sticker.badManifest"
+				, message = "Invalid asset definition in manifest. Type must be equal to either 'css' or 'js'"
+				, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+			);
+		}
 	}
 }
