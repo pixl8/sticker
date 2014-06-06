@@ -4,7 +4,7 @@ component extends="testbox.system.testing.BaseSpec"{
 
 	// executes before all suites+specs in the run() method
 	function beforeAll(){
-		variables.validator = new sticker.ManifestValidator();
+		variables.validator = new sticker.util.ManifestValidator();
 	}
 
 	// executes after all suites+specs in the run() method
