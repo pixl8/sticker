@@ -12,7 +12,7 @@ component output=false {
 	 */
 	public struct function parseManifests( required array manifests ) output=false {
 		var combinedManifests = _combineManifests( arguments.manifests );
-		
+
 		return {};
 	}
 
@@ -21,9 +21,16 @@ component output=false {
 		var combined = {};
 
 		arguments.manifests.each( function( manifest ){
+			if ( !IsSimpleValue( arguments.manifest ) ) {
+				throw( 
+					  type="Sticker.badManifest"
+					, message="Invalid manifest. The passed manifest is not a JSON string"
+				);
+			}
+
 			try{
 				var parsedJson = DeSerializeJson( arguments.manifest );
-				combined.append( parsedJson );
+				
 			} catch ( any e ) {
 				throw( 
 					  type="Sticker.badManifest"
@@ -31,6 +38,15 @@ component output=false {
 					, detail="Passed manifest: [#arguments.manifest#]" 
 				);
 			}
+
+			if ( !IsStruct( parsedJson ) ) {
+				throw( 
+					  type="Sticker.badManifest"
+					, message="Invalid manifest. The supplied manifest was in an incorrect format"
+					, detail="Passed manifest: [#arguments.manifest#]" 
+				);		
+			}
+			combined.append( parsedJson );
 		} );
 
 		return combined;
