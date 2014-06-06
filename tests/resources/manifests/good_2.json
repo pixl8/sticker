@@ -1,0 +1,12 @@
+{
+	"anotherasset" : {
+		  "url"    : "http://www.google.com"
+		, "type"   : "js"
+		, "before" : ["*"]
+	},
+	"someasset" : {
+		  "path"  : "/some/path.js"
+		, "type"  : "js"
+		, "after" : "*"
+	}
+}
