@@ -1,0 +1,17 @@
+{
+	"someresource" : {
+		  "path"   : "/path/to/{cachebuster}-myfile.js"
+		, "before" : "*"
+		, "after"  : "^anotherresource"
+	},
+
+	"anotherresource" : {
+		  "url"    : "http://someurl/tosomejs.js"
+		, "before" : ["*"]
+	},
+
+	"someother" : {
+		  "path"  : "/this/is/me/right/here.js"
+		, "after" : [ "someresource", "^anotherresource" ]
+	}
+}
