@@ -15,6 +15,17 @@ component extends="testbox.system.testing.BaseSpec"{
 
 	function run(){
 		describe( "parseManifests()", function(){
+			it( "should return combined structure of all inputted manifests", function(){
+				var expected = { someKey="me", anotherKey={me="too"}, yetAnotherkey="loveit" };
+				var actual   = manifestParser.parseManifests( [
+					  '{"someKey":"test", "anotherKey":{"me":"too"}}'
+					, '{"yetAnotherKey":"loveit"}'
+					, '{"someKey":"me"}'
+				] );
+
+				expect( actual ).toBe( expected );
+			} );
+
 			it( "should throw useful error when input is invalid JSON", function(){
 				expect( function(){
 					manifestParser.parseManifests( [ '{ "valid":"json here" }', 'i {am not valid JSON' ] );

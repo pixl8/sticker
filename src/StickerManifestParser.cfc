@@ -11,9 +11,7 @@ component output=false {
 	 * @manifests.hint an array of JSON strings, each of which should be a valid Sticker manifest
 	 */
 	public struct function parseManifests( required array manifests ) output=false {
-		var combinedManifests = _combineManifests( arguments.manifests );
-
-		return {};
+		return _combineManifests( arguments.manifests );
 	}
 
 // private helpers
