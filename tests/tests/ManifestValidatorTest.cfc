@@ -26,6 +26,12 @@ component extends="testbox.system.testing.BaseSpec"{
 					validator.validate( '[1,2,3,4]' );
 				}).toThrow( type="Sticker.badManifest", regex="incorrect format" );
 			} );
+
+			it( "should throw useful error when input contains item that is not an structure", function(){
+				expect( function(){
+					validator.validate( '{ "somekey":"not an object" }' );
+				}).toThrow( type="Sticker.badManifest", regex="invalid asset definition" );
+			} );
 		});
 	}
 	

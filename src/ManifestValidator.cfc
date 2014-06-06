@@ -31,5 +31,20 @@ component output=false {
 				, detail  = "Passed manifest: [#arguments.manifest#]" 
 			);
 		}
+
+		for( var key in parsedJson ){
+			_validateAssetDefinition( key, parsedJson[ key ] );
+		}
+	}
+
+// private helpers
+	private void function _validateAssetDefinition( required string key, required any definition ) output=false {
+		if ( !IsStruct( arguments.definition ) ) {
+			throw( 
+				  type    = "Sticker.badManifest"
+				, message = "Invalid asset definition in manifest. Asset definitions must be a JSON object"
+				, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( arguments.definition )#]" 
+			);	
+		}
 	}
 }
