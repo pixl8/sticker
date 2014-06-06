@@ -87,6 +87,30 @@ component extends="testbox.system.testing.BaseSpec"{
 					validator.validate( '{ "somekey":{ "path":"/some/path",type:"whatever" }, "anotherkey":{"url":"http//www.google.com", "type":"css"}}' );
 				}).toThrow( type="Sticker.badManifest", regex="invalid asset definition.*?Type must be equal to either 'css' or 'js'" );
 			} );
+
+			it( "should throw useful error when asset definition's before element is neither an array or simple value", function(){
+				expect( function(){
+					validator.validate( '{ "somekey":{ "path":"/some/path",type:"css","before":{}}}' );
+				}).toThrow( type="Sticker.badManifest", regex="invalid asset definition.*?\[before\] element must be either a string or array of strings" );
+			} );
+
+			it( "should throw useful error when asset definition's before element is an array that contains one or more non-simple elements", function(){
+				expect( function(){
+					validator.validate( '{ "somekey":{ "path":"/some/path",type:"css","before":["test",{}]}}' );
+				}).toThrow( type="Sticker.badManifest", regex="invalid asset definition.*?\[before\] element must be either a string or array of strings" );
+			} );
+
+			it( "should throw useful error when asset definition's after element is neither an array or simple value", function(){
+				expect( function(){
+					validator.validate( '{ "somekey":{ "path":"/some/path",type:"css","after":{}}}' );
+				}).toThrow( type="Sticker.badManifest", regex="invalid asset definition.*?\[after\] element must be either a string or array of strings" );
+			} );
+
+			it( "should throw useful error when asset definition's after element is an array that contains one or more non-simple elements", function(){
+				expect( function(){
+					validator.validate( '{ "somekey":{ "path":"/some/path",type:"css","after":["test",{}]}}' );
+				}).toThrow( type="Sticker.badManifest", regex="invalid asset definition.*?\[after\] element must be either a string or array of strings" );
+			} );
 		});
 	}
 	

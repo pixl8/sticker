@@ -114,5 +114,49 @@ component output=false {
 				, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
 			);
 		}
+
+		if ( def.keyExists( "before" ) ) {
+			if ( !IsSimpleValue( def.before ) && !IsArray( def.before ) ) {				
+				throw( 
+					  type    = "Sticker.badManifest"
+					, message = "Invalid asset definition in manifest. [before] element must be either a string or array of strings"
+					, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+				);
+			}
+
+			if ( IsArray( def.before ) ) {
+				for( var b in def.before ) {
+					if ( !IsSimpleValue( b) ) {
+						throw( 
+							  type    = "Sticker.badManifest"
+							, message = "Invalid asset definition in manifest. [before] element must be either a string or array of strings"
+							, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+						);			
+					}
+				}
+			}
+		}
+
+		if ( def.keyExists( "after" ) ) {
+			if ( !IsSimpleValue( def.after ) && !IsArray( def.after ) ) {				
+				throw( 
+					  type    = "Sticker.badManifest"
+					, message = "Invalid asset definition in manifest. [after] element must be either a string or array of strings"
+					, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+				);
+			}
+
+			if ( IsArray( def.after ) ) {
+				for( var b in def.after ) {
+					if ( !IsSimpleValue( b) ) {
+						throw( 
+							  type    = "Sticker.badManifest"
+							, message = "Invalid asset definition in manifest. [after] element must be either a string or array of strings"
+							, detail  = "Asset definition: [""#arguments.key#"":#SerializeJson( def )#]" 
+						);			
+					}
+				}
+			}
+		}
 	}
 }
