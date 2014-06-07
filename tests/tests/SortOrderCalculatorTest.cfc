@@ -41,6 +41,21 @@ component extends="testbox.system.testing.BaseSpec"{
 				expect( calculator.calculateOrder( testManifest ) ).toBe( expectedOrder );
 			} );
 
+			it( "should NOT *explode* when there is an infinite loop in the ordering logic (i.e. two assets declare that they should be before each other)", function(){
+				var testManifest = {
+					  asset01 = { before="asset02", after="asset03" }
+					, asset02 = { before=["asset01"] }
+					, asset03 = { after="asset01" }
+				};
+				var expectedOrder = [
+					  "asset02"
+					, "asset03"
+					, "asset01"
+				];
+
+				expect( calculator.calculateOrder( testManifest ) ).toBe( expectedOrder );
+			} );
+
 		} );
 	}
 	
