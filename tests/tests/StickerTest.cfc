@@ -4,6 +4,7 @@ component extends="testbox.system.testing.BaseSpec"{
 
 	// executes before all suites+specs in the run() method
 	function beforeAll(){
+		variables.sticker = new sticker.Sticker();
 	}
 
 	// executes after all suites+specs in the run() method
