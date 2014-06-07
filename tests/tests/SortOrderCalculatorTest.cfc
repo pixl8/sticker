@@ -46,10 +46,12 @@ component extends="testbox.system.testing.BaseSpec"{
 					  asset01 = { before="asset02", after="asset03" }
 					, asset02 = { before=["asset01"] }
 					, asset03 = { after="asset01" }
+					, asset04 = { before="asset01", after="asset01" }
 				};
 				var expectedOrder = [
 					  "asset02"
 					, "asset03"
+					, "asset04"
 					, "asset01"
 				];
 
