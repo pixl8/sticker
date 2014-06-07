@@ -16,22 +16,38 @@ component extends="testbox.system.testing.BaseSpec"{
 	function run(){
 		describe( "parseFiles()", function(){
 
-			it( "should combine manifests from multiple manifest file paths", function(){
+			it( "should combine manifests from multiple manifest file paths, expanding wildcards in before and after definitions", function(){
 				var actual   = parser.parseFiles( [ "/resources/manifests/good_1.json", "/resources/manifests/good_2.json" ] );
 				var expected = {
 					core = {
-						  url  = "http://core.com/js"
-						, type = "js"
+						  url    = "http://core.com/js"
+						, type   = "js"
+						, before = []
+						, after  = []
 					},
 					anotherasset = {
 						  url    = "http://www.google.com"
 						, type   = "js"
-						, before = ["*"]
+						, before = [ "core", "someasset" ]
+						, after  = [ "forkicks" ]
 					},
 					someasset = {
-						  path  = "/some/path.js"
-						, type  = "js"
-						, after = "*"
+						  path   = "/some/path.js"
+						, type   = "js"
+						, before = []
+						, after  = [ "anotherasset", "core", "forkicks", "justonemore" ]
+					},
+					justonemore = {
+						  path   = "/some/other/path.js"
+						, type   = "js"
+						, before = [ "anotherasset" ]
+						, after  = []
+					},
+					forkicks = {
+		  				  url = "http://thisisforkicks.com"
+		  				, type = "js"
+		  				, before = []
+						, after  = []
 					}
 				};
 

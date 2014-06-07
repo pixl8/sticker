@@ -43,10 +43,10 @@ component output=false {
 
 // private utility
 	private any function _isBefore( required string key1, required string key2, required struct assets ) output=false {
-		var key1Befores = _getChain( arguments.key1, arguments.assets, "before" );
-		var key1Afters  = _getChain( arguments.key1, arguments.assets, "after" );
-		var key2Befores = _getChain( arguments.key2, arguments.assets, "before" );
-		var key2Afters  = _getChain( arguments.key2, arguments.assets, "after" );
+		var key1Befores = arguments.assets[ arguments.key1 ].before;
+		var key1Afters  = arguments.assets[ arguments.key1 ].after;
+		var key2Befores = arguments.assets[ arguments.key2 ].before;
+		var key2Afters  = arguments.assets[ arguments.key2 ].after;
 		
 		if ( !key1Befores.findNoCase( arguments.key2 ) && !key1Afters.findNoCase( arguments.key2 ) && !key2Befores.findNoCase( arguments.key1 ) && !key2Afters.findNoCase( arguments.key1) ) {
 			return; // return null - no positive evidence to suggest it is before - leave order as it is
@@ -54,46 +54,5 @@ component output=false {
 
 		return     ( key1Befores.findNoCase( arguments.key2 ) || key2Afters.findNoCase( arguments.key1 ) )
 		       && !( key2Befores.findNoCase( arguments.key1 ) || key1Afters.findNoCase( arguments.key2 ) );
-	}
-
-	private array function _getChain( required string assetKey, required struct assets, required string type ) output=false {
-		var unexpandedChain = arguments.assets[ arguments.assetKey ][ arguments.type ] ?: [];
-		var chain = [];
-		
-		if ( IsSimpleValue( unexpandedChain ) ) {
-			unexpandedChain = [ unexpandedChain ];
-		}
-
-		for( var key in unexpandedChain ){
-			if ( chain.findNoCase( key ) || key == arguments.assetKey ) {
-				continue;
-			}
-
-			if ( key contains "*" ) {
-				var expanded = _expandWildcard( key, arguments.assets );
-				for( var expandedKey in expanded ){
-					if ( !chain.findNoCase( expandedKey ) && expandedKey != arguments.assetKey ) {
-						chain.append( expandedKey );
-					}
-				}
-			} else {
-				chain.append( key );
-			}
-		}
-
-		return chain;
-	}
-
-	private array function _expandWildcard( required string wildcard, required struct assets ) output=false {
-		var wildcardRegex = Replace( arguments.wildcard, "*", ".*?", "all" );
-		var expanded      = [];
-
-		for( var key in arguments.assets.keyArray() ){
-			if ( ReFindNoCase( wildcardRegex, key ) ) {
-				expanded.append( key );
-			}
-		}
-
-		return expanded;
 	}
 }

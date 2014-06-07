@@ -3,10 +3,20 @@
 		  "url"    : "http://www.google.com"
 		, "type"   : "js"
 		, "before" : ["*"]
+		, "after"  : ["forkicks"]
 	},
 	"someasset" : {
 		  "path"  : "/some/path.js"
 		, "type"  : "js"
 		, "after" : "*"
+	},
+	"justonemore" : {
+		  "path"  : "/some/other/path.js"
+		, "type"  : "js"
+		, "before" : "anotherasset"
+	},
+	"forkicks" : {
+		  "url" : "http://thisisforkicks.com"
+		, "type" : "js"
 	}
 }
