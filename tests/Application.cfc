@@ -1,3 +1,3 @@
 component output=false {
-	this.mappings[ "/sticker" ] = ExpandPath( "../src" );
+	this.mappings[ "/sticker" ] = ExpandPath( "../sticker" );
 }
