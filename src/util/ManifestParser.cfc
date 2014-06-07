@@ -1,3 +1,8 @@
+/**
+* I provider a method for taking a number of manifest files
+* and returning a combined manifest file for them all
+* 
+*/
 component output=false {
 
 	public struct function parseFiles( required array filePaths ) output=false {
