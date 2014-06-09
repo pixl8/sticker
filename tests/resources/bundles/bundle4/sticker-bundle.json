@@ -1,22 +1,22 @@
 {
-	"anotherasset" : {
+	"cssanotherasset" : {
 		  "url"    : "http://www.google.com"
-		, "type"   : "js"
+		, "type"   : "css"
 		, "before" : ["*"]
 		, "after"  : ["forkicks"]
 	},
-	"someasset" : {
-		  "path"  : "/some/path.js"
-		, "type"  : "js"
+	"csssomeasset" : {
+		  "path"  : "/some/path.css"
+		, "type"  : "css"
 		, "after" : "*"
 	},
-	"justonemore" : {
-		  "path"  : "/some/other/path.js"
-		, "type"  : "js"
+	"cssjustonemore" : {
+		  "path"  : "/some/other/path.css"
+		, "type"  : "css"
 		, "before" : "anotherasset"
 	},
-	"forkicks" : {
+	"cssforkicks" : {
 		  "url" : "http://thisisforkicks.com"
-		, "type" : "js"
+		, "type" : "css"
 	}
 }
