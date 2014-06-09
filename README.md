@@ -14,6 +14,8 @@ A quick example:
     sticker.addBundle( rootDirectory="/assets", rootUrl="http://assets.mysite.com" )
            .addBundle( rootDirectory="/some/external/assets", rootUrl="/external/assets" );
            
+    sticker.load();
+           
     // per request
     sticker.include( "jquery" )
            .include( "core-js" )
