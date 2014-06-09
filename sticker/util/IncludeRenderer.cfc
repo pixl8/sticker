@@ -29,4 +29,13 @@ component output=false {
 
 		return rendered & ">";
 	}
+
+	/**
+	 * I render a JS include
+	 * 
+	 * @src.hint The URL of the javacript to include
+	 */ 
+	public string function renderJsInclude( required string src ) output=false {
+		return '<script src="#arguments.src#"></script>';
+	}
 }

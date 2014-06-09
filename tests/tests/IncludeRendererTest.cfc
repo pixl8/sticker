@@ -14,6 +14,7 @@ component extends="testbox.system.testing.BaseSpec"{
 /*********************************** BDD SUITES ***********************************/
 
 	function run(){
+		
 		describe( "renderCssInclude", function(){
 
 			it( "should return link tag with href matching the passed href", function(){
@@ -27,6 +28,14 @@ component extends="testbox.system.testing.BaseSpec"{
 			it( "should include media attribute when specified", function(){
 				expect( renderer.renderCssInclude( href="/a/print.css", media="print" ) ).toBe( '<link rel="stylesheet" type="text/css" href="/a/print.css" media="print">' );
 			} );
+		} );
+
+		describe( "renderJsInclude", function(){
+
+			it( "should return script tag with src matching the passed src", function(){
+				expect( renderer.renderJsInclude( src="/path/to/some.js" ) ).toBe( '<script src="/path/to/some.js"></script>' );
+			} );
+
 		} );
 	}
 
