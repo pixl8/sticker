@@ -1,0 +1,10 @@
+language: java
+
+env:
+  matrix:
+  - PLATFORM=railo41 TARGET=test-ci
+  - PLATFORM=railo42beta TARGET=test-ci
+  - PLATFORM=railo42beta TARGET=build
+
+install: ant -f build/build.xml -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM install-ci-deps
+script: ant -f build/build.xml -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM -Dbranch=$TRAVIS_BRANCH -Dtag=$TRAVIS_TAG $TARGET
