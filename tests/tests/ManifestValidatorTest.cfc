@@ -1,5 +1,5 @@
-component extends="testbox.system.testing.BaseSpec"{
-	
+component extends="testbox.system.BaseSpec"{
+
 /*********************************** LIFE CYCLE Methods ***********************************/
 
 	// executes before all suites+specs in the run() method
@@ -113,5 +113,5 @@ component extends="testbox.system.testing.BaseSpec"{
 			} );
 		});
 	}
-	
+
 }
