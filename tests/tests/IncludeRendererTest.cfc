@@ -80,6 +80,32 @@ component extends="testbox.system.testing.BaseSpec"{
 				);
  			} );
 		} );
+
+		describe( "addRenderedIncludesToManifest()", function(){
+
+			it( "should render an include for each asset in the passed manifest structure", function(){
+				var manifest = {
+					  key1 = { url="/some/url/to.js"           , type="js" }
+					, key2 = { url="/some/url/toanother.js"    , type="js" }
+					, key3 = { url="/some/url/toyetanother.js" , type="js", ie="!IE" }
+					, key4 = { url="/some/url/to.css"          , type="css" }
+					, key5 = { url="/some/url/toanother.css"   , type="css", media="print" }
+					, key6 = { url="/some/url/toyetanother.css", type="css", ie="IE 8" }
+				};
+				var actual   = renderer.addRenderedIncludesToManifest( manifest=manifest );
+				var expected = duplicate( manifest );
+
+				expected.key1.renderedInclude = '<script src="/some/url/to.js"></script>';
+				expected.key2.renderedInclude = '<script src="/some/url/toanother.js"></script>';
+				expected.key3.renderedInclude = '<!--[if !IE]>--><script src="/some/url/toyetanother.js"></script><!-- <![endif]-->';
+				expected.key4.renderedInclude = '<link rel="stylesheet" type="text/css" href="/some/url/to.css">';
+				expected.key5.renderedInclude = '<link rel="stylesheet" type="text/css" href="/some/url/toanother.css" media="print">';
+				expected.key6.renderedInclude = '<!--[if IE 8]><link rel="stylesheet" type="text/css" href="/some/url/toyetanother.css"><![endif]-->';
+
+				expect( actual ).toBe( expected );
+			} );
+
+		} );
 	}
 
 }

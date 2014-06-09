@@ -60,4 +60,24 @@ component output=false {
 		}
 		return "<!--[if #arguments.condition#]>#arguments.content#<![endif]-->";
 	}
+
+	/**
+	 * I take a manifest object and render includes each of the assets found in it
+	 *
+	 * @manifest.hint A sticker manifest object (structure)
+	 */
+	public struct function addRenderedIncludesToManifest( required struct manifest ) output=false {
+		for ( var assetId in arguments.manifest ) {
+			var asset    = arguments.manifest[ assetId ];
+			var rendered = asset.type == "js" ? renderJsInclude( asset.url ) : renderCssInclude( href=asset.url, media=asset.media ?: "" );
+
+
+			if ( Len( Trim( asset.ie ?: "" ) ) ) {
+				rendered = wrapWithIeConditional( rendered, asset.ie );
+			}
+
+			arguments.manifest[ assetId ].renderedInclude = rendered;
+		}
+		return arguments.manifest;
+	}
 }
