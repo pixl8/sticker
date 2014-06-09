@@ -14,7 +14,7 @@ deploy:
   secret_access_key:
     secure: WMBNULr8RwOLrcIpOkjCgKjo4492ITvkdNAnZRLKhxRqrcRGpF/KwlCGm+Lhmdo4gc0Kv+6Cuou/7dx2eH/0Updg+qDgpbB5akmjxcXCfYTvc6v5n73FZ/sJBjnVpYSBSovn6OcbLcJF+Smqld0czBDtqobnBuwXvyUa/egA+A4=
   bucket: downloads.presidecms.com
-  local-dir: artifacts
+  local-dir: build/artifacts
   on:
     repo: pixl8/sticker
     condition: "$TARGET = build"
