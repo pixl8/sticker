@@ -1,38 +1,53 @@
 /**
 * I provider a method for taking a number of manifest files
 * and returning a combined manifest file for them all
-* 
+*
 */
 component output=false {
 
 	/**
 	 * I take an array of manifest file paths and return a merged
 	 * structure of asset definitions
-	 * 
-	 * @filePaths.hint An array of filepaths. each filepath should point at a valid Sticker manifest json file
+	 *
+	 * @filePath.hint filepath of the json manifest file
 	 */
-	public struct function parseFiles( required array filePaths ) output=false {
-		var manifest  = {};
-		var validator = new ManifestValidator();
-
-		for( var filePath in filePaths ){
-			if ( !IsSimpleValue( filePath ) || !FileExists( filePath ) ) {
-				throw(
-					  type    = "Sticker.missingManifest"
-					, message = "Manifest file [#SerializeJson( filePath )#] does not exist or is not available"
-				);
-			}
-
-			var fileContent = FileRead( filePath );
-			
-			validator.validate( fileContent );
-
-			manifest.append( DeSerializeJson( fileContent ) );
+	public struct function parseManifest( required string filePath, required string rootUrl ) output=false {
+		if ( !FileExists( arguments.filePath ) ) {
+			throw(
+				  type    = "Sticker.missingManifest"
+				, message = "Manifest file [#SerializeJson( arguments.filePath )#] does not exist or is not available"
+			);
 		}
 
-		_expandWildcards( manifest );
+		var fileContent = FileRead( arguments.filePath );
+		new ManifestValidator().validate( fileContent );
+
+		manifest = DeSerializeJson( fileContent );
+		for( var assetId in manifest ) {
+			if ( !manifest[ assetId ].keyExists( "url" ) ) {
+				manifest[ assetId ].url = rootUrl & ( manifest[ assetId ].path ?: "/" )
+			}
+		}
 
 		return manifest;
+	}
+
+	/**
+	 * I take an array of manifest structures and merge them, expanding any wildcard before and after paths
+	 *
+	 * @manifests.hint array of manifest structures (i.e. as returned from parseManifest)
+	 */
+	public struct function mergeManifests( required array manifests ) output=false {
+		var merged = {};
+		for( var manifest in arguments.manifests ){
+			if ( IsStruct( manifest ) ) {
+				merged.append( manifest );
+			}
+		}
+
+		_expandWildcards( merged );
+
+		return merged;
 	}
 
 // private helpers

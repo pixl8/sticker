@@ -28,8 +28,14 @@ component output=false {
 	 */
 	public BundleManager function addBundle( required string rootDirectory, required string rootUrl ) output=false {
 		var bundles = _getBundles();
+		var bundle  = Duplicate( arguments );
 
-		bundles.append( arguments );
+		bundle.manifest = _getManifestParser().parseManifest(
+			  filePath = rootDirectory & "/sticker-bundle.json"
+			, rootUrl  = arguments.rootUrl
+		);
+
+		bundles.append( bundle );
 		_setBundles( bundles );
 
 		return this;
@@ -40,13 +46,13 @@ component output=false {
 	 *
 	 */
 	public struct function getManifest() output=false {
-		var bundles           = _getBundles();
-		var manifestFilePaths = [];
+		var bundles   = _getBundles();
+		var manifests = [];
 
 		for( var bundle in bundles ){
-			manifestFilePaths.append( bundle.rootDirectory & "/sticker-bundle.json" );
+			manifests.append( bundle.manifest );
 		}
-		return _getManifestParser().parseFiles( filePaths=manifestFilePaths );
+		return _getManifestParser().mergeManifests( manifests=manifests );
 	}
 
 

@@ -20,14 +20,15 @@ component extends="testbox.system.testing.BaseSpec"{
 
 		describe( "calling addBundle() multiple times followed by getManifest()", function(){
 			it( "should return a merged manifest based on the manifest file for each bundle", function(){
+				var manifests = [ {test="1"}, {test="2"}, {test="3"}, {test="4"} ];
 				var manifestParserResult = { some="structure" };
 
-				mockManifestParser.$( "parseFiles" ).$args( filePaths=[
-					  "/resources/bundles/bundle1/sticker-bundle.json"
-					, "/resources/bundles/bundle3/sticker-bundle.json"
-					, "/resources/bundles/bundle2/sticker-bundle.json"
-					, "/resources/bundles/bundle4/sticker-bundle.json"
-				] ).$results( manifestParserResult );
+
+				mockManifestParser.$( "parseManifest" ).$args( filePath="/resources/bundles/bundle1/sticker-bundle.json", rootUrl="http://bundle1.com/assets" ).$results( manifests[1] );
+				mockManifestParser.$( "parseManifest" ).$args( filePath="/resources/bundles/bundle3/sticker-bundle.json", rootUrl="/"                         ).$results( manifests[2] );
+				mockManifestParser.$( "parseManifest" ).$args( filePath="/resources/bundles/bundle2/sticker-bundle.json", rootUrl="http://bundle2.com/assets" ).$results( manifests[3] );
+				mockManifestParser.$( "parseManifest" ).$args( filePath="/resources/bundles/bundle4/sticker-bundle.json", rootUrl="/assets"                   ).$results( manifests[4] );
+				mockManifestParser.$( "mergeManifests" ).$args( manifests ).$results( manifestParserResult );
 
 				expect( manager.addBundle( rootDirectory="/resources/bundles/bundle1", rootUrl="http://bundle1.com/assets" )
 				       .addBundle( rootDirectory="/resources/bundles/bundle3", rootUrl="/" )
