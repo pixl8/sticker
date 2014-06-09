@@ -60,6 +60,8 @@
 		<exec executable="/bin/bash" failonerror="true" outputproperty="output.log">
 			<env key="WORK_DIR" value="${work.dir}" />
 			<env key="BUILD_DIR" value="${build.dir}" />
+			<env key="TESTFRAMEWORK" value="${test.framework}" />
+      		<env key="TESTFRAMEWORK_URL" value="${test.framework.url}" />
 			<env key="PLATFORM_URL" value="${platform.url}" />
 			<env key="SERVER_PORT" value="${server.port}" />
 			<env key="STOP_PORT" value="${stop.port}" />
