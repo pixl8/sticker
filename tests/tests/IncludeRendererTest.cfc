@@ -15,7 +15,7 @@ component extends="testbox.system.testing.BaseSpec"{
 
 	function run(){
 
-		describe( "renderCssInclude", function(){
+		describe( "renderCssInclude()", function(){
 
 			it( "should return link tag with href matching the passed href", function(){
 				expect( renderer.renderCssInclude( href="/path/to/css.min.css" ) ).toBe( '<link rel="stylesheet" type="text/css" href="/path/to/css.min.css">' );
@@ -30,7 +30,7 @@ component extends="testbox.system.testing.BaseSpec"{
 			} );
 		} );
 
-		describe( "renderJsInclude", function(){
+		describe( "renderJsInclude()", function(){
 
 			it( "should return script tag with src matching the passed src", function(){
 				expect( renderer.renderJsInclude( src="/path/to/some.js" ) ).toBe( '<script src="/path/to/some.js"></script>' );
@@ -38,7 +38,7 @@ component extends="testbox.system.testing.BaseSpec"{
 
 		} );
 
-		describe( "renderJsData", function(){
+		describe( "renderJsData()", function(){
 
 			it( "should return a script block with passed data rendered as a JavaScript object", function(){
 				var testData = StructNew( "linked" );
@@ -64,6 +64,21 @@ component extends="testbox.system.testing.BaseSpec"{
 
 			} );
 
+		} );
+
+		describe( "wrapWithIeConditional()", function(){
+
+			it( "should return passed content wrapped in passed condition", function(){
+				expect( renderer.wrapWithIeConditional( "somecontent", "IE LT 7" ) ).toBe(
+					"<!--[if IE LT 7]>somecontent<![endif]-->"
+				);
+ 			} );
+
+ 			it( "should return passed content wrapped in a special 'NOT IE' conditional, when condition=""!IE""", function(){
+ 				expect( renderer.wrapWithIeConditional( "<script src=""/some/path/to.js""></script>", "!IE" ) ).toBe(
+					"<!--[if !IE]>--><script src=""/some/path/to.js""></script><!-- <![endif]-->"
+				);
+ 			} );
 		} );
 	}
 

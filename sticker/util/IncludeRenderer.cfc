@@ -47,4 +47,17 @@ component output=false {
 	public string function renderData( required struct data, string variableName="cfrequest" ) output=false {
 		return '<script>#arguments.variableName#=#SerializeJson( arguments.data )#</script>';
 	}
+
+	/**
+	 * I wrap passed content in IE conditional tags
+	 *
+	 * @content.hint The content, i.e. a script or link tag, to be wrapped
+	 * @condition.hint The condition with which to wrap the content, e.g. "IE lt 7" or "!IE"
+	 */
+	public string function wrapWithIeConditional( required string content, required string condition ) output=false {
+		if ( arguments.condition == "!IE" ) {
+			return '<!--[if #arguments.condition#]>-->#arguments.content#<!-- <![endif]-->';
+		}
+		return "<!--[if #arguments.condition#]>#arguments.content#<![endif]-->";
+	}
 }
