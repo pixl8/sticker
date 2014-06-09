@@ -2,7 +2,7 @@
 	reportPath = ExpandPath( "/results" );
 
 	try {
-		testbox = new testbox.system.testing.TestBox( reporter="text", options={}, directory={
+		testbox = new testbox.system.TestBox( reporter="text", options={}, directory={
 			recurse = true,
 			mapping = "tests.tests",
 			filter  = function( required path ){ return true; }
