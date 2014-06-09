@@ -18,7 +18,7 @@ component extends="testbox.system.BaseSpec"{
 			it( "should throw useful error, when passed manifest file path is not a valid file path", function(){
 				expect( function(){
 					parser.parseManifest( "/i/do/not/exist", "/" );
-				}).toThrow( type="Sticker.missingManifest", regex="manifest file \[\""\/i\/do\/not\/exist\""\] does not exist or is not available" );
+				}).toThrow( type="Sticker.missingManifest", regex="Manifest file \[\""\/i\/do\/not\/exist\""\] does not exist or is not available" );
 			} );
 
 			it( "should validate the manifest file", function(){
