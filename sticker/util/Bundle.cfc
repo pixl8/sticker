@@ -59,6 +59,43 @@ component output=false {
 		return this;
 	}
 
+	/**
+	 * I add multiple assets at the same time by finding
+	 * files within the given directory that match the given
+	 * matching pattern.
+	 *
+	 * @directory.hint   Directory in which to find files, relative to the bundle's root directory
+	 * @match.hint       Wildcard pattern with which to match files, e.g. "*.min.css"
+	 * @idGenerator.hint Function to generate an asset ID for each matched file. Takes a 'path' parameter that path of the matched file, relative to the root of the bundle
+	 */
+	public Bundle function addAssets(
+		  required string   directory
+		, required string   match
+		, required function idGenerator
+	) output=false {
+		var rootDir   = ExpandPath( _getRootDirectory() );
+		var directory = rootDir;
+		var matches   = "";
+
+		if ( Left( arguments.directory, 1 ) != "/" ) {
+			directory &= "/";
+		}
+		directory &= arguments.directory;
+
+		if ( DirectoryExists( directory ) ) {
+			matches = DirectoryList( directory, true, "path", arguments.match );
+			for( var path in matches ){
+				var relativePath = Replace( Replace( path, rootDir, "" ), "\", "/", "all" );
+				addAsset(
+					  id   = arguments.idGenerator( relativePath )
+					, path = relativePath
+				);
+			}
+		}
+
+		return this;
+	}
+
 // PRIVATE HELPERS
 	private string function _resolvePath( required string path ) output=false {
 		var fullPath  = _getRootDirectory();
