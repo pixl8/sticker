@@ -1,5 +1,5 @@
 /**
- * I provide functionality to take an asset manifest and return an array of asset
+ * I provide functionality to take an collection of assets and return an array of asset
  * keys in the correct order
  */
 
@@ -8,7 +8,7 @@ component output=false {
 	/**
 	 * I calculate the sort order of assets
 	 *
-	 * @assets.hint Assets structure as parsed by the ManifestParser object
+	 * @assets.hint Assets structure
 	 */
 	public array function calculateOrder( required struct assets ) output=false {
 		var assetKeys  = arguments.assets.keyArray();

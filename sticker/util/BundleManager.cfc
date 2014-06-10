@@ -17,10 +17,10 @@ component output=false {
 // PUBLIC API METHODS
 
 	/**
-	 * I add a bundle (directory containing assets with a manifest file at the root)
+	 * I add a bundle (directory containing StickerBundle.cfc config file at the root)
 	 * to the manager instance
 	 *
-	 * @rootDirectory.hint Root directory of the bundle, must contain a sticker-bundle.json manifest file
+	 * @rootDirectory.hint Root directory of the bundle, must contain a StickerBundle.cfc configuration file in its root
 	 * @rootUrl.hint       URL that maps to the directory
 	 */
 	public BundleManager function addBundle( required string rootDirectory, required string rootUrl, string rootComponentPath ) output=false {
