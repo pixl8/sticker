@@ -53,7 +53,7 @@ component output=false {
 		asset.type = arguments.type ?: ListLast( asset.url, "." );
 		asset.before = asset.after = [];
 
-		assetCollection[ arguments.id ] = asset;
+		assetCollection[ arguments.id ] = new Asset( argumentCollection=asset );
 
 		return this;
 	}
@@ -87,6 +87,16 @@ component output=false {
 		}
 
 		return resolved & matches[1];
+	}
+
+	/**
+	 * I return an Asset object for the given asset id
+	 *
+	 * @id.hint ID of the asset to fetch
+	 */
+	public Asset function asset( required string id ) output=false {
+		var assetCollection = _getAssetCollection();
+		return assetCollection[ arguments.id ];
 	}
 
 // GETTERS AND SETTERS
