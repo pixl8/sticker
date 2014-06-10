@@ -12,11 +12,11 @@ component output=false {
 	 *
 	 */
 	public Sticker function init() output=false {
-		_setBundleManager( new util.BundleManager( manifestParser=new util.ManifestParser() ) );
-		_setManifest     ( {}                                                                 );
-		_setSortOrder    ( []                                                                 );
-		_setReady        ( false                                                              );
-		_setRequestKey   ( "stickerIncludes_" & CreateUUId()                                  );
+		_setBundleManager( new util.BundleManager( )         );
+		_setAssets       ( {}                                );
+		_setSortOrder    ( []                                );
+		_setReady        ( false                             );
+		_setRequestKey   ( "stickerIncludes_" & CreateUUId() );
 
 		return this;
 	}
@@ -27,7 +27,7 @@ component output=false {
 	 * I add a bundle to this instance of sticker, returning an instance of the Sticker object
 	 * so that you can chain me
 	 *
-	 * @rootDirectory.hint Root directory of the bundle, must contain a sticker-bundle.json manifest file
+	 * @rootDirectory.hint Root directory of the bundle, must contain a StickerBundle.cfc configuration file
 	 * @rootUrl.hint       URL that maps to the directory
 	 */
 	public Sticker function addBundle( required string rootDirectory, required string rootUrl ) output=false {
@@ -43,12 +43,12 @@ component output=false {
 	 * of assets
 	 */
 	public Sticker function load() output=false {
-		var manifest = _getBundleManager().getManifest();
+		var assets = _getBundleManager().getAssets();
 
-		new util.IncludeRenderer().addRenderedIncludesToManifest( manifest );
+		new util.IncludeRenderer().addRenderedIncludesToAssets( assets );
 
-		_setManifest( manifest );
-		_setSortOrder( new util.SortOrderCalculator().calculateOrder( manifest ) );
+		_setAssets( assets );
+		_setSortOrder( new util.SortOrderCalculator().calculateOrder( assets ) );
 		_setReady( true );
 
 		return this;
@@ -65,15 +65,15 @@ component output=false {
 	/**
 	 * I return the URL of the given asset
 	 *
-	 * @assetId.hint ID of the asset as defined in any of the sticker bundle's manifest file
+	 * @assetId.hint ID of the asset as defined in any of the sticker bundle's configuration files
 	 */
 	public string function getAssetUrl( required string assetId ) output=false {
 		_checkReady();
 
-		var manifest = _getManifest();
+		var assets = _getAssets();
 
-		if ( manifest.keyExists( arguments.assetId ) ) {
-			return manifest[ arguments.assetId ].url;
+		if ( assets.keyExists( arguments.assetId ) ) {
+			return assets[ arguments.assetId ].getUrl();
 		}
 
 		throw( type="Sticker.missingAsset", message="asset [#arguments.assetid#] not found" );
@@ -83,15 +83,15 @@ component output=false {
 	/**
 	 * I include an asset in the request, ready for rendering
 	 *
-	 * @assetId.hint ID of the asset as defined in any of the sticker bundle's manifest file
+	 * @assetId.hint ID of the asset as defined in any of the sticker bundles' config file
 	 * @throwOnMissing.hint Whether or not to throw an error when the asset does not exist, default=true
 	 */
 	public Sticker function include( required string assetId, boolean throwOnMissing=true ) output=false {
 		_checkReady();
 
-		var manifest = _getManifest();
+		var assets = _getAssets();
 
-		if ( manifest.keyExists( arguments.assetId ) ) {
+		if ( assets.keyExists( arguments.assetId ) ) {
 			var requestedIncludes = _getRequestStorage();
 
 			requestedIncludes[ arguments.assetId ] = "";
@@ -129,7 +129,7 @@ component output=false {
 	public string function renderIncludes( string type ) output=false {
 		var includes      = _getRequestStorage().keyArray();
 		var fullSortOrder = _getSortOrder();
-		var manifest      = _getManifest();
+		var assets        = _getAssets();
 		var rendered      = "";
 
 		includes.sort( function( a, b ){
@@ -145,8 +145,8 @@ component output=false {
 					}
 				}
 				for( var asset in includes ){
-					if ( manifest[ asset ].type == t ){
-						rendered &= manifest[ asset ].renderedInclude & Chr(13) & Chr(10);
+					if ( assets[ asset ].getType() == t ){
+						rendered &= assets[ asset ].getRenderedInclude() & Chr(13) & Chr(10);
 					}
 				}
 			}
@@ -182,11 +182,11 @@ component output=false {
 		_bundleManager = arguments.bundleManager;
 	}
 
-	private struct function _getManifest() output=false {
-		return _manifest;
+	private struct function _getAssets() output=false {
+		return _assets;
 	}
-	private void function _setManifest( required struct manifest ) output=false {
-		_manifest = arguments.manifest;
+	private void function _setAssets( required struct assets ) output=false {
+		_assets = arguments.assets;
 	}
 
 	private array function _getSortOrder() output=false {

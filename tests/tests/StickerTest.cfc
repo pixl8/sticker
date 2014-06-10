@@ -20,9 +20,7 @@ component extends="testbox.system.BaseSpec"{
 				var sticker = new sticker.Sticker();
 
 				sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
-				       .addBundle( rootDirectory="/resources/bundles/bundle3/", rootUrl="/"                         )
 				       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
-				       .addBundle( rootDirectory="/resources/bundles/bundle4/", rootUrl="/assets"                   )
 				       .load();
 
 				expect( sticker.ready() ).toBe( true );
@@ -35,13 +33,11 @@ component extends="testbox.system.BaseSpec"{
 				var sticker = new sticker.Sticker();
 
 				expect( sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
-			       .addBundle( rootDirectory="/resources/bundles/bundle3/", rootUrl="/"                         )
 			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
-			       .addBundle( rootDirectory="/resources/bundles/bundle4/", rootUrl="/assets"                   )
 			       .load()
-			       .getAssetUrl( "someasset" )
+			       .getAssetUrl( "js-someplugin" )
 
-				).toBe( "http://bundle2.com/assets/some/path.js" );
+				).toBe( "http://bundle2.com/assets/js/someplugin.min.js" );
 			} );
 
 			it( "should throw a useful error when the given asset does not exist", function(){
@@ -93,31 +89,25 @@ component extends="testbox.system.BaseSpec"{
 			var sticker = new sticker.Sticker();
 
 			sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
-			       .addBundle( rootDirectory="/resources/bundles/bundle3/", rootUrl="/"                         )
 			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
-			       .addBundle( rootDirectory="/resources/bundles/bundle4/", rootUrl="/assets"                   )
 			       .load();
 
-			sticker.include( "core"            )
-			       .include( "justonemore"     )
-			       .include( "anotherasset"    )
-			       .include( "someasset"       )
-			       .include( "forkicks"        )
-			       .include( "cssanotherasset" )
-			       .include( "csssomeasset"    )
-			       .include( "cssjustonemore"  )
-			       .include( "cssforkicks"     );
+			sticker.include( "css-some"              )
+			       .include( "css-subfolder-another" )
+			       .include( "css-subfolder-more"    )
+			       .include( "jquery"                )
+			       .include( "jquery-ui-css"         )
+			       .include( "js-someplugin"         )
+			       .include( "js-subfolder-myfile"   );
 
 			expect( sticker.renderIncludes() ).toBe(
-				'<link rel="stylesheet" type="text/css" href="http://www.google.com">' & Chr(13) & Chr(10) &
-				'<link rel="stylesheet" type="text/css" href="/assets/some/other/path.css">' & Chr(13) & Chr(10) &
-				'<link rel="stylesheet" type="text/css" href="http://thisisforkicks.com">' & Chr(13) & Chr(10) &
-				'<link rel="stylesheet" type="text/css" href="/assets/some/path.css">' & Chr(13) & Chr(10) &
-				'<script src="http://thisisforkicks.com"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://bundle2.com/assets/some/other/path.js"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://www.google.com"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://core.com/js"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://bundle2.com/assets/some/path.js"></script>' & Chr(13) & Chr(10)
+				'<link rel="stylesheet" type="text/css" href="http://jquery.com/jqueryui.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/some.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/subfolder/another.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/subfolder/more.min.css">' & Chr(13) & Chr(10) &
+				'<script src="http://bundle1.com/assets/js/subfolder/fa56e8c-myfile.min.js"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://jquery.com/jquery.js"></script>' & Chr(13) & Chr(10)
 			);
 		} );
 
@@ -125,26 +115,22 @@ component extends="testbox.system.BaseSpec"{
 			var sticker = new sticker.Sticker();
 
 			sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
-			       .addBundle( rootDirectory="/resources/bundles/bundle3/", rootUrl="/"                         )
 			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
-			       .addBundle( rootDirectory="/resources/bundles/bundle4/", rootUrl="/assets"                   )
 			       .load();
 
-			sticker.include( "core"            )
-			       .include( "justonemore"     )
-			       .include( "anotherasset"    )
-			       .include( "someasset"       )
-			       .include( "forkicks"        )
-			       .include( "cssanotherasset" )
-			       .include( "csssomeasset"    )
-			       .include( "cssjustonemore"  )
-			       .include( "cssforkicks"     );
+			sticker.include( "css-some"              )
+			       .include( "css-subfolder-another" )
+			       .include( "css-subfolder-more"    )
+			       .include( "jquery"                )
+			       .include( "jquery-ui-css"         )
+			       .include( "js-someplugin"         )
+			       .include( "js-subfolder-myfile"   );
 
 			expect( sticker.renderIncludes( "css" ) ).toBe(
-				'<link rel="stylesheet" type="text/css" href="http://www.google.com">' & Chr(13) & Chr(10) &
-				'<link rel="stylesheet" type="text/css" href="/assets/some/other/path.css">' & Chr(13) & Chr(10) &
-				'<link rel="stylesheet" type="text/css" href="http://thisisforkicks.com">' & Chr(13) & Chr(10) &
-				'<link rel="stylesheet" type="text/css" href="/assets/some/path.css">' & Chr(13) & Chr(10)
+				'<link rel="stylesheet" type="text/css" href="http://jquery.com/jqueryui.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/some.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/subfolder/another.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/subfolder/more.min.css">' & Chr(13) & Chr(10)
 			);
 		} );
 
@@ -152,27 +138,21 @@ component extends="testbox.system.BaseSpec"{
 			var sticker = new sticker.Sticker();
 
 			sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
-			       .addBundle( rootDirectory="/resources/bundles/bundle3/", rootUrl="/"                         )
 			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
-			       .addBundle( rootDirectory="/resources/bundles/bundle4/", rootUrl="/assets"                   )
 			       .load();
 
-			sticker.include( "core"            )
-			       .include( "justonemore"     )
-			       .include( "anotherasset"    )
-			       .include( "someasset"       )
-			       .include( "forkicks"        )
-			       .include( "cssanotherasset" )
-			       .include( "csssomeasset"    )
-			       .include( "cssjustonemore"  )
-			       .include( "cssforkicks"     );
+			sticker.include( "css-some"              )
+			       .include( "css-subfolder-another" )
+			       .include( "css-subfolder-more"    )
+			       .include( "jquery"                )
+			       .include( "jquery-ui-css"         )
+			       .include( "js-someplugin"         )
+			       .include( "js-subfolder-myfile"   );
 
-			expect( sticker.renderIncludes( "js" ) ).toBe(
-				'<script src="http://thisisforkicks.com"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://bundle2.com/assets/some/other/path.js"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://www.google.com"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://core.com/js"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://bundle2.com/assets/some/path.js"></script>' & Chr(13) & Chr(10)
+			expect( sticker.renderIncludes( type="js" ) ).toBe(
+				'<script src="http://bundle1.com/assets/js/subfolder/fa56e8c-myfile.min.js"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://jquery.com/jquery.js"></script>' & Chr(13) & Chr(10)
 			);
 		} );
 
@@ -180,19 +160,17 @@ component extends="testbox.system.BaseSpec"{
 			var sticker = new sticker.Sticker();
 
 			sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
-			       .addBundle( rootDirectory="/resources/bundles/bundle3/", rootUrl="/"                         )
 			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
-			       .addBundle( rootDirectory="/resources/bundles/bundle4/", rootUrl="/assets"                   )
 			       .load();
 
-			sticker.include( "core" )
+			sticker.include( "jquery" )
 			       .includeData( { key1="key1" } )
 			       .includeData( { key2="key2" } )
 			       .includeData( { key3="key3" } );
 
 			expect( sticker.renderIncludes( "js" ) ).toBe(
 				'<script>cfrequest={"key1":"key1","key2":"key2","key3":"key3"}</script>' & Chr(13) & Chr(10) &
-				'<script src="http://core.com/js"></script>' & Chr(13) & Chr(10)
+				'<script src="http://jquery.com/jquery.js"></script>' & Chr(13) & Chr(10)
 			);
 		} );
 
