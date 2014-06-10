@@ -71,6 +71,14 @@ component extends="testbox.system.BaseSpec"{
 				var asset = bundle.asset( "somejs" );
 				expect( asset.getMemento() ).toBe( { type="js", path="/js/subfolder/fa56e8c-myfile.min.js", url="/assets/js/subfolder/fa56e8c-myfile.min.js", before=[], after=[] } );
 			} );
+
+			it( "should throw a helpful error when passed id to the asset does not exist", function(){
+				var bundle = new sticker.util.Bundle( rootDirectory="/resources/bundles/bundle1", rootUrl="/assets/" );
+
+				expect( function(){
+					bundle.asset( "anyoldfile" );
+				} ).toThrow( type="Sticker.missingAsset" );
+			} );
 		} );
 
 	}

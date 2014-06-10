@@ -96,6 +96,11 @@ component output=false {
 	 */
 	public Asset function asset( required string id ) output=false {
 		var assetCollection = _getAssetCollection();
+
+		if ( !assetCollection.keyExists( arguments.id ) ) {
+			throw( type="Sticker.missingAsset", message="The asset with id [#arguments.id#] could not be found in this bundle" );
+		}
+
 		return assetCollection[ arguments.id ];
 	}
 
