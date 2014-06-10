@@ -45,10 +45,10 @@ component output=false {
 		var assetCollection = _getAssetCollection();
 		var asset = {};
 
-		if ( arguments.keyExists( "path" ) ) {
+		if ( StructKeyExists( arguments, "path" ) ) {
 			asset.path = _resolvePath( arguments.path );
 			asset.url = _getRootUrl() & asset.path;
-		} else if ( arguments.keyExists( "url" ) ) {
+		} else if ( StructKeyExists( arguments, "url" ) ) {
 			asset.url = arguments.url
 		}
 
