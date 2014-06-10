@@ -3,11 +3,15 @@
  */
 component accessors=true output=false {
 
-	property name="type"   type="string";
-	property name="url"    type="string";
-	property name="path"   type="string" default="";
-	property name="before" type="array";
-	property name="after"  type="array";
+	property name="type"            type="string";
+	property name="url"             type="string";
+	property name="path"            type="string" default="";
+	property name="path"            type="string" default="";
+	property name="before"          type="array";
+	property name="after"           type="array";
+	property name="renderedInclude" type="string" default="";
+	property name="ie"              type="string" default="";
+	property name="media"           type="string" default="";
 
 	public Asset function before() output=false {
 		var bf = getBefore();
@@ -29,11 +33,14 @@ component accessors=true output=false {
 
 	public struct function getMemento() output=false {
 		return {
-			  type   = getType()
-			, url    = getUrl()
-			, path   = getPath()
-			, before = getBefore()
-			, after  = getAfter()
+			  type            = getType()
+			, url             = getUrl()
+			, path            = getPath()
+			, before          = getBefore()
+			, after           = getAfter()
+			, renderedInclude = getRenderedInclude()
+			, ie              = getIe()
+			, media           = getMedia()
 		};
 	}
 

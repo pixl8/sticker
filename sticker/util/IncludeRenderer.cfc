@@ -62,22 +62,21 @@ component output=false {
 	}
 
 	/**
-	 * I take a manifest object and render includes each of the assets found in it
+	 * I take a collection of assets and render includes for each one
 	 *
-	 * @manifest.hint A sticker manifest object (structure)
+	 * @assets.hint A collection of sticker assets
 	 */
-	public struct function addRenderedIncludesToManifest( required struct manifest ) output=false {
-		for ( var assetId in arguments.manifest ) {
-			var asset    = arguments.manifest[ assetId ];
-			var rendered = asset.type == "js" ? renderJsInclude( asset.url ) : renderCssInclude( href=asset.url, media=asset.media ?: "" );
+	public struct function addRenderedIncludesToAssets( required struct assets ) output=false {
+		for ( var assetId in arguments.assets ) {
+			var asset    = arguments.assets[ assetId ];
+			var rendered = asset.getType() == "js" ? renderJsInclude( asset.getUrl() ) : renderCssInclude( href=asset.getUrl(), media=asset.getMedia() );
 
-
-			if ( Len( Trim( asset.ie ?: "" ) ) ) {
-				rendered = wrapWithIeConditional( rendered, asset.ie );
+			if ( Len( Trim( asset.getIe() ) ) ) {
+				rendered = wrapWithIeConditional( rendered, asset.getIe() );
 			}
 
-			arguments.manifest[ assetId ].renderedInclude = rendered;
+			arguments.assets[ assetId ].setRenderedInclude( rendered );
 		}
-		return arguments.manifest;
+		return arguments.assets;
 	}
 }

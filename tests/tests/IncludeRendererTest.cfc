@@ -81,19 +81,19 @@ component extends="testbox.system.BaseSpec"{
  			} );
 		} );
 
-		describe( "addRenderedIncludesToManifest()", function(){
+		describe( "addRenderedIncludesToAssets()", function(){
 
-			it( "should render an include for each asset in the passed manifest structure", function(){
-				var manifest = {
-					  key1 = { url="/some/url/to.js"           , type="js" }
-					, key2 = { url="/some/url/toanother.js"    , type="js" }
-					, key3 = { url="/some/url/toyetanother.js" , type="js", ie="!IE" }
-					, key4 = { url="/some/url/to.css"          , type="css" }
-					, key5 = { url="/some/url/toanother.css"   , type="css", media="print" }
-					, key6 = { url="/some/url/toyetanother.css", type="css", ie="IE 8" }
+			it( "should render an include for each asset in the passed assets structure", function(){
+				var assets = {
+					  key1 = new sticker.util.Asset( before=[], after=[], url="/some/url/to.js"           , type="js" )
+					, key2 = new sticker.util.Asset( before=[], after=[], url="/some/url/toanother.js"    , type="js" )
+					, key3 = new sticker.util.Asset( before=[], after=[], url="/some/url/toyetanother.js" , type="js", ie="!IE" )
+					, key4 = new sticker.util.Asset( before=[], after=[], url="/some/url/to.css"          , type="css" )
+					, key5 = new sticker.util.Asset( before=[], after=[], url="/some/url/toanother.css"   , type="css", media="print" )
+					, key6 = new sticker.util.Asset( before=[], after=[], url="/some/url/toyetanother.css", type="css", ie="IE 8" )
 				};
-				var actual   = renderer.addRenderedIncludesToManifest( manifest=manifest );
-				var expected = duplicate( manifest );
+				var actual   = _assetsToStruct( renderer.addRenderedIncludesToAssets( assets=assets ) );
+				var expected = duplicate( _assetsToStruct( assets ) );
 
 				expected.key1.renderedInclude = '<script src="/some/url/to.js"></script>';
 				expected.key2.renderedInclude = '<script src="/some/url/toanother.js"></script>';
@@ -108,4 +108,15 @@ component extends="testbox.system.BaseSpec"{
 		} );
 	}
 
+/************************************ PRIVATE HELPERS ***************************************/
+
+	private struct function _assetsToStruct( required struct assets ) output=false {
+		var a = {};
+
+		for( var asset in arguments.assets ){
+			a[ asset ] = arguments.assets[ asset ].getMemento();
+		}
+
+		return a;
+	}
 }
