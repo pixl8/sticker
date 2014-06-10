@@ -28,7 +28,12 @@ component output=false {
 		var bundle        = new Bundle( rootDirectory=arguments.rootDirectory, rootUrl=arguments.rootUrl );
 		var configCfcPath = arguments.rootComponentPath ?: _convertDirectoryToComponentPath( arguments.rootDirectory );
 
+
 		configCfcPath &= ".StickerBundle";
+
+		if ( !FileExists( ListAppend( arguments.rootDirectory, "StickerBundle.cfc", "/" ) ) ) {
+			throw( type="Sticker.missingStickerBundle", message="No StickerBundle.cfc file found at [#arguments.rootDirectory#]" );
+		}
 
 		CreateObject( configCfcPath ).configure( bundle );
 

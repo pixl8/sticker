@@ -15,6 +15,16 @@ component extends="testbox.system.BaseSpec"{
 
 	function run(){
 
+		describe( "addBundle()", function(){
+
+			it( "should throw helpful error when adding a bundle that does not have a StickerBundle.cfc file", function(){
+				expect( function(){
+					manager.addBundle( rootDirectory="/resources/bundles/", rootUrl="http://bundle1.com/assets" );
+				}).toThrow( type="Sticker.missingStickerBundle" );
+			} );
+
+		} );
+
 		describe( "calling addBundle() multiple times followed by getAssets()", function(){
 			it( "should return a merged set of assets based on the configuration of each bundle", function(){
 				var assets = manager.addBundle( rootDirectory="/resources/bundles/bundle1", rootUrl="http://bundle1.com/assets" )
