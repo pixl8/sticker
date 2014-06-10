@@ -4,10 +4,7 @@ component extends="testbox.system.BaseSpec"{
 
 	// executes before all suites+specs in the run() method
 	function beforeAll(){
-		variables.mockManifestParser = getMockBox().createEmptyMock( "sticker.util.ManifestParser" );
-		variables.manager            = new sticker.util.BundleManager(
-			manifestParser = mockManifestParser
-		);
+		variables.manager = new sticker.util.BundleManager();
 	}
 
 	// executes after all suites+specs in the run() method
@@ -18,26 +15,78 @@ component extends="testbox.system.BaseSpec"{
 
 	function run(){
 
-		describe( "calling addBundle() multiple times followed by getManifest()", function(){
-			it( "should return a merged manifest based on the manifest file for each bundle", function(){
-				var manifests = [ {test="1"}, {test="2"}, {test="3"}, {test="4"} ];
-				var manifestParserResult = { some="structure" };
+		describe( "calling addBundle() multiple times followed by getAssets()", function(){
+			it( "should return a merged set of assets based on the configuration of each bundle", function(){
+				var assets = manager.addBundle( rootDirectory="/resources/bundles/bundle1", rootUrl="http://bundle1.com/assets" )
+				                    .addBundle( rootDirectory="/resources/bundles/bundle2", rootUrl="http://bundle2.com/assets" )
+				                    .getAssets();
 
 
-				mockManifestParser.$( "parseManifest" ).$args( filePath="/resources/bundles/bundle1/sticker-bundle.json", rootUrl="http://bundle1.com/assets" ).$results( manifests[1] );
-				mockManifestParser.$( "parseManifest" ).$args( filePath="/resources/bundles/bundle3/sticker-bundle.json", rootUrl="/"                         ).$results( manifests[2] );
-				mockManifestParser.$( "parseManifest" ).$args( filePath="/resources/bundles/bundle2/sticker-bundle.json", rootUrl="http://bundle2.com/assets" ).$results( manifests[3] );
-				mockManifestParser.$( "parseManifest" ).$args( filePath="/resources/bundles/bundle4/sticker-bundle.json", rootUrl="/assets"                   ).$results( manifests[4] );
-				mockManifestParser.$( "mergeManifests" ).$args( manifests ).$results( manifestParserResult );
-
-				expect( manager.addBundle( rootDirectory="/resources/bundles/bundle1", rootUrl="http://bundle1.com/assets" )
-				       .addBundle( rootDirectory="/resources/bundles/bundle3", rootUrl="/" )
-				       .addBundle( rootDirectory="/resources/bundles/bundle2", rootUrl="http://bundle2.com/assets" )
-				       .addBundle( rootDirectory="/resources/bundles/bundle4", rootUrl="/assets" )
-				       .getManifest()
-				).toBe( manifestParserResult );
+				expect( _assetsToStruct( assets ) ).toBe( {
+					"js-someplugin"={
+						  before = ["jquery"]
+						, after  = []
+						, path   = "/js/someplugin.min.js"
+						, url    = "http://bundle2.com/assets/js/someplugin.min.js"
+						, type   = "js"
+					},
+					"css-subfolder-another"={
+						  before = []
+						, after  = []
+						, path   = "/css/subfolder/another.min.css"
+						, url    = "http://bundle2.com/assets/css/subfolder/another.min.css"
+						, type   = "css"
+					},
+					"js-subfolder-myfile"={
+						  before = ["jquery", "js-someplugin"]
+						, after  = []
+						, path   = "/js/subfolder/fa56e8c-myfile.min.js"
+						, url    = "http://bundle1.com/assets/js/subfolder/fa56e8c-myfile.min.js"
+						, type   = "js"
+					},
+					"css-subfolder-more"={
+						  before = ["subfolder-another"]
+						, after  = []
+						, path   = "/css/subfolder/more.min.css"
+						, url    = "http://bundle2.com/assets/css/subfolder/more.min.css"
+						, type   = "css"
+					},
+					"jquery"={
+						  before = []
+						, after  = []
+						, path   = ""
+						, url    = "http://jquery.com/jquery.js"
+						, type   = "js"
+					},
+					"jquery-ui-css"={
+						  before = ["css-some", "css-subfolder-another", "css-subfolder-more"]
+						, after  = []
+						, path   = ""
+						, url    = "http://jquery.com/jqueryui.min.css"
+						, type   = "css"
+					},
+					"css-some"={
+						  before = ["css-subfolder-another", "css-subfolder-more"]
+						, after  = ["jquery-ui-css"]
+						, path   = "/css/some.min.css"
+						, url    = "http://bundle2.com/assets/css/some.min.css"
+						, type   = "css"
+					}
+				} );
 			} );
 		} );
+	}
+
+/************************************ PRIVATE HELPERS ***************************************/
+
+	private struct function _assetsToStruct( required struct assets ) output=false {
+		var a = {};
+
+		for( var asset in arguments.assets ){
+			a[ asset ] = arguments.assets[ asset ].getMemento();
+		}
+
+		return a;
 	}
 
 }

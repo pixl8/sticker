@@ -140,7 +140,7 @@ component output=false {
 		var assetCollection = _getAssetCollection();
 
 		if ( !assetCollection.keyExists( arguments.id ) ) {
-			throw( type="Sticker.missingAsset", message="The asset with id [#arguments.id#] could not be found in this bundle" );
+			throw( type="Sticker.missingAsset", message="The asset with id [#arguments.id#] could not be found in this bundle. Registered bundles: #SerializeJson( assetCollection.keyArray() )#" );
 		}
 
 		return assetCollection[ arguments.id ];
