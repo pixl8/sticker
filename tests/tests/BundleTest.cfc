@@ -60,6 +60,16 @@ component extends="testbox.system.BaseSpec"{
 				} ).toThrow( type="Sticker.multipleAssets" );
 			} );
 
+			it( "should allow for adding media and IE restrictions", function(){
+				var bundle = new sticker.util.Bundle( rootDirectory="/resources/bundles/bundle1", rootUrl="/assets/" );
+
+				bundle.addAsset( id="jquery", url="http://www.jquery.com/jquery.js", ie="!IE", media="print" );
+
+				expect( _assetsToStruct( bundle.getAssets() ) ).toBe( {
+					jquery = { type="js", path="", url="http://www.jquery.com/jquery.js", before=[], after=[], ie="!IE", media="print", renderedInclude="" }
+				} );
+			})
+
 		} );
 
 		describe( "addAssets()", function(){

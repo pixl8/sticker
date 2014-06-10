@@ -39,6 +39,8 @@ component output=false {
 	    ,          string url
 	    ,          string path
 	    ,          string type
+	    ,          string ie    = ""
+	    ,          string media = ""
 	) output=false {
 		var assetCollection = _getAssetCollection();
 		var asset = {};
@@ -50,9 +52,11 @@ component output=false {
 			asset.url = arguments.url
 		}
 
-		asset.type = arguments.type ?: ListLast( asset.url, "." );
+		asset.type   = arguments.type ?: ListLast( asset.url, "." );
 		asset.before = [];
-		asset.after = [];
+		asset.after  = [];
+		asset.ie     = arguments.ie;
+		asset.media  = arguments.media;
 
 		assetCollection[ arguments.id ] = new Asset( argumentCollection=asset );
 
