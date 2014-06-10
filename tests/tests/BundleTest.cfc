@@ -83,6 +83,25 @@ component extends="testbox.system.BaseSpec"{
 				} );
 			} );
 
+			it( "should add a single asset for each file that passes its match closure function when passing a function for the 'match' argument", function(){
+				var bundle = new sticker.util.Bundle( rootDirectory="/resources/bundles/bundle2", rootUrl="http://static.mysite.com" );
+
+				bundle.addAssets(
+					  directory   = "/css"
+					, match       = function( path ){ return ReFindNoCase( ".*?\.min\.css$", arguments.path ); }
+					, idGenerator = function( path ){
+						var fileName = ListLast( path, "/" );
+						return LCase( ReReplaceNoCase( fileName, "^(.*?)\.min\.css", "\1" ) )
+					  }
+				);
+
+				expect( _assetsToStruct( bundle.getAssets() ) ).toBe( {
+					  some    = { type="css", path="/css/some.min.css"             , url="http://static.mysite.com/css/some.min.css"             , before=[], after=[] }
+					, another = { type="css", path="/css/subfolder/another.min.css", url="http://static.mysite.com/css/subfolder/another.min.css", before=[], after=[] }
+					, more    = { type="css", path="/css/subfolder/more.min.css"   , url="http://static.mysite.com/css/subfolder/more.min.css"   , before=[], after=[] }
+				} );
+			} );
+
 		} );
 
 		describe( "asset()", function(){

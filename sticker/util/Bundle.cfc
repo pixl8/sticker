@@ -65,12 +65,12 @@ component output=false {
 	 * matching pattern.
 	 *
 	 * @directory.hint   Directory in which to find files, relative to the bundle's root directory
-	 * @match.hint       Wildcard pattern with which to match files, e.g. "*.min.css"
+	 * @match.hint       Wildcard pattern with which to match files, e.g. "*.min.css", or a function that returns whether or not the passed 'path' shoudl match
 	 * @idGenerator.hint Function to generate an asset ID for each matched file. Takes a 'path' parameter that path of the matched file, relative to the root of the bundle
 	 */
 	public Bundle function addAssets(
 		  required string   directory
-		, required string   match
+		, required any      match
 		, required function idGenerator
 	) output=false {
 		var rootDir   = ExpandPath( _getRootDirectory() );
@@ -83,13 +83,17 @@ component output=false {
 		directory &= arguments.directory;
 
 		if ( DirectoryExists( directory ) ) {
-			matches = DirectoryList( directory, true, "path", arguments.match );
+			var filter = IsSimpleValue( arguments.match ) ? arguments.match : "*";
+			matches = DirectoryList( directory, true, "path", filter );
 			for( var path in matches ){
 				var relativePath = Replace( Replace( path, rootDir, "" ), "\", "/", "all" );
-				addAsset(
-					  id   = arguments.idGenerator( relativePath )
-					, path = relativePath
-				);
+
+				if ( !IsClosure( arguments.match ) || arguments.match( relativePath ) ) {
+					addAsset(
+						  id   = arguments.idGenerator( relativePath )
+						, path = relativePath
+					);
+				}
 			}
 		}
 
