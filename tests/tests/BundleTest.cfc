@@ -81,6 +81,26 @@ component extends="testbox.system.BaseSpec"{
 			} );
 		} );
 
+		describe( "asset( 'someasset' ).after( 'list', 'of', 'assets' ).before( 'list', 'of', 'assets' )", function(){
+
+			it( "should populate the given asset's before and after arrays", function(){
+				var bundle = new sticker.util.Bundle( rootDirectory="/resources/bundles/bundle1", rootUrl="/assets/" );
+
+				bundle.addAsset( id="somejs", path="/js/subfolder/*-myfile.min.js" );
+
+				var asset = bundle.asset( "somejs" ).before( "assetx", "assety", "assetz" ).after( "asset1", "*" );
+
+				expect( asset.getMemento() ).toBe( {
+					  type   = "js"
+					, path   = "/js/subfolder/fa56e8c-myfile.min.js"
+					, url    = "/assets/js/subfolder/fa56e8c-myfile.min.js"
+					, before = [ "assetx", "assety", "assetz" ]
+					, after  = [ "asset1", "*" ]
+				} );
+			} );
+
+		} )
+
 	}
 
 /************************************ PRIVATE HELPERS ***************************************/

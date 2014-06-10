@@ -51,7 +51,8 @@ component output=false {
 		}
 
 		asset.type = arguments.type ?: ListLast( asset.url, "." );
-		asset.before = asset.after = [];
+		asset.before = [];
+		asset.after = [];
 
 		assetCollection[ arguments.id ] = new Asset( argumentCollection=asset );
 
