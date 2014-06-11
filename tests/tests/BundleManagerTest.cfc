@@ -42,6 +42,8 @@ component extends="testbox.system.BaseSpec"{
 						, ie              = ""
 						, media           = ""
 						, renderedInclude = ""
+						, dependsOn       = []
+						, dependents      = []
 					},
 					"css-subfolder-another"={
 						  before          = []
@@ -52,6 +54,8 @@ component extends="testbox.system.BaseSpec"{
 						, ie              = ""
 						, media           = ""
 						, renderedInclude = ""
+						, dependsOn       = []
+						, dependents      = []
 					},
 					"js-subfolder-myfile"={
 						  before          = ["jquery", "js-someplugin"]
@@ -62,6 +66,8 @@ component extends="testbox.system.BaseSpec"{
 						, ie              = ""
 						, media           = ""
 						, renderedInclude = ""
+						, dependsOn       = []
+						, dependents      = []
 					},
 					"css-subfolder-more"={
 						  before          = ["subfolder-another"]
@@ -72,6 +78,8 @@ component extends="testbox.system.BaseSpec"{
 						, ie              = ""
 						, media           = ""
 						, renderedInclude = ""
+						, dependsOn       = []
+						, dependents      = []
 					},
 					"jquery"={
 						  before          = []
@@ -82,6 +90,8 @@ component extends="testbox.system.BaseSpec"{
 						, ie              = ""
 						, media           = ""
 						, renderedInclude = ""
+						, dependsOn       = []
+						, dependents      = []
 					},
 					"jquery-ui-css"={
 						  before          = ["css-some", "css-subfolder-another", "css-subfolder-more"]
@@ -92,6 +102,8 @@ component extends="testbox.system.BaseSpec"{
 						, ie              = ""
 						, media           = ""
 						, renderedInclude = ""
+						, dependsOn       = []
+						, dependents      = []
 					},
 					"css-some"={
 						  before          = ["css-subfolder-another", "css-subfolder-more"]
@@ -102,6 +114,8 @@ component extends="testbox.system.BaseSpec"{
 						, ie              = ""
 						, media           = ""
 						, renderedInclude = ""
+						, dependsOn       = []
+						, dependents      = []
 					}
 				} );
 			} );
