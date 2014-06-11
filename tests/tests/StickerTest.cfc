@@ -192,6 +192,22 @@ component extends="testbox.system.BaseSpec"{
 			);
 		} );
 
+		it( "should render includes in specified groups", function(){
+			var sticker = new sticker.Sticker();
+
+			sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
+			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
+			       .load();
+
+			sticker.include( assetId="jquery", group="top");
+			sticker.include( assetId="css-some", group="anotherGroup");
+
+			expect( sticker.renderIncludes( group="top" ) ).toBe(
+				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://jquery.com/jquery.js"></script>' & Chr(13) & Chr(10)
+			);
+		} );
+
 
 
 	} );

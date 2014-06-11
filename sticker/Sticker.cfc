@@ -86,7 +86,7 @@ component output=false {
 	 * @assetId.hint ID of the asset as defined in any of the sticker bundles' config file
 	 * @throwOnMissing.hint Whether or not to throw an error when the asset does not exist, default=true
 	 */
-	public Sticker function include( required string assetId, boolean throwOnMissing=true ) output=false {
+	public Sticker function include( required string assetId, boolean throwOnMissing=true, string group="default" ) output=false {
 		_checkReady();
 
 		var assets = _getAssets();
@@ -94,9 +94,13 @@ component output=false {
 		if ( assets.keyExists( arguments.assetId ) ) {
 			var requestedIncludes = _getRequestStorage();
 
-			requestedIncludes[ arguments.assetId ] = "";
+			if ( !requestedIncludes.keyExists( arguments.group ) ){
+				requestedIncludes[ arguments.group ] = StructNew( "linked" );
+			}
+
+			requestedIncludes[ arguments.group ][ arguments.assetId ] = "";
 			for( var asset in assets[ arguments.assetId ].getDependsOn() ){
-				requestedIncludes[ asset ] = "";
+				requestedIncludes[ arguments.group ][ asset ] = "";
 			}
 
 			return this;
@@ -129,11 +133,13 @@ component output=false {
 	 * I ensure all includes are rendered in the correct order
 	 *
 	 */
-	public string function renderIncludes( string type ) output=false {
-		var includes      = _getRequestStorage().keyArray();
+	public string function renderIncludes( string type, string group="default" ) output=false {
+		var includes      = _getRequestStorage();
 		var fullSortOrder = _getSortOrder();
 		var assets        = _getAssets();
 		var rendered      = "";
+
+		includes = ( includes[ arguments.group ] ?: {} ).keyArray();
 
 		includes.sort( function( a, b ){
 			return fullSortOrder.find( a ) < fullSortOrder.find( b ) ? -1 : 1;
@@ -169,7 +175,7 @@ component output=false {
 		var key = _getRequestKey();
 		if ( !request.keyExists( key ) ) {
 			request[ key ] = {
-				  includes = StructNew( "linked" )
+				  includes = {}
 				, data     = StructNew( "linked" )
 			};
 		}
