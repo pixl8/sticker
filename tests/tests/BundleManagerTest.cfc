@@ -43,7 +43,7 @@ component extends="testbox.system.BaseSpec"{
 						, media           = ""
 						, renderedInclude = ""
 						, dependsOn       = []
-						, dependents      = []
+						, dependents      = ["jquery"]
 					},
 					"css-subfolder-another"={
 						  before          = []
@@ -114,7 +114,7 @@ component extends="testbox.system.BaseSpec"{
 						, ie              = ""
 						, media           = ""
 						, renderedInclude = ""
-						, dependsOn       = []
+						, dependsOn       = ["jquery-ui-css"]
 						, dependents      = []
 					}
 				} );

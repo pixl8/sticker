@@ -31,11 +31,10 @@ component output=false {
 			  }
 		);
 
-
-		bundle.asset( "jquery-ui-css" ).before( "*" );
-		bundle.asset( "css-some" ).before( "*" ).after( "jquery-ui-css" );
+		bundle.asset( "jquery-ui-css"      ).before( "*" );
+		bundle.asset( "css-some"           ).before( "*" ).dependsOn( "jquery-ui-css" );
 		bundle.asset( "css-subfolder-more" ).before( "subfolder-another" );
-		bundle.asset( "js-someplugin" ).before( "jquery" );
+		bundle.asset( "js-someplugin"      ).dependents( "jquery" );
 	}
 
 }
