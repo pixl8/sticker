@@ -163,13 +163,31 @@ component extends="testbox.system.BaseSpec"{
 			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
 			       .load();
 
-			sticker.include( "jquery" )
+			sticker.include( "js-someplugin" )
 			       .includeData( { key1="key1" } )
 			       .includeData( { key2="key2" } )
 			       .includeData( { key3="key3" } );
 
 			expect( sticker.renderIncludes( "js" ) ).toBe(
 				'<script>cfrequest={"key1":"key1","key2":"key2","key3":"key3"}</script>' & Chr(13) & Chr(10) &
+				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10)
+			);
+		} );
+
+		it( "should render any dependencies that have not been explicity included", function(){
+			var sticker = new sticker.Sticker();
+
+			sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
+			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
+			       .load();
+
+			sticker.include( "jquery" )
+			       .include( "css-some" );
+
+			expect( sticker.renderIncludes() ).toBe(
+				'<link rel="stylesheet" type="text/css" href="http://jquery.com/jqueryui.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/some.min.css">' & Chr(13) & Chr(10) &
+				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
 				'<script src="http://jquery.com/jquery.js"></script>' & Chr(13) & Chr(10)
 			);
 		} );

@@ -95,6 +95,9 @@ component output=false {
 			var requestedIncludes = _getRequestStorage();
 
 			requestedIncludes[ arguments.assetId ] = "";
+			for( var asset in assets[ arguments.assetId ].getDependsOn() ){
+				requestedIncludes[ asset ] = "";
+			}
 
 			return this;
 		}

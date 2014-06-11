@@ -83,14 +83,14 @@ component extends="testbox.system.BaseSpec"{
 					},
 					"jquery"={
 						  before          = []
-						, after           = []
+						, after           = ["js-someplugin"]
 						, path            = ""
 						, url             = "http://jquery.com/jquery.js"
 						, type            = "js"
 						, ie              = ""
 						, media           = ""
 						, renderedInclude = ""
-						, dependsOn       = []
+						, dependsOn       = ["js-someplugin"]
 						, dependents      = []
 					},
 					"jquery-ui-css"={

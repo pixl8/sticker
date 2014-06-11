@@ -56,6 +56,7 @@ component output=false {
 		}
 
 		_expandWildcards( assets );
+		_mapDependencies( assets );
 
 		return assets;
 	}
@@ -68,12 +69,12 @@ component output=false {
 	}
 
 	private void function _expandWildcards( required struct assets ) output=false {
-		var types = [ "before", "after" ];
+		var types = [ "before", "after", "dependsOn", "dependents" ];
 
 		for( var assetKey in arguments.assets ){
 			var asset = arguments.assets[ assetKey ];
 			for( var type in types ){
-				var raw      = ( type == "before" ? asset.getBefore() : asset.getAfter() );
+				var raw      = _getBeforeAfterOrDependencies( type, asset );
 				var expanded = [];
 
 				for( var rawKey in raw ) {
@@ -91,7 +92,20 @@ component output=false {
 				}
 				expanded.sort( "textnocase" );
 
-				type == "before" ? asset.setBefore( expanded ) : asset.setAfter( expanded );
+				_setBeforeAfterOrDependencies( type, asset, expanded );
+			}
+		}
+	}
+
+	private void function _mapDependencies( required struct assets ) output=false {
+		for( var assetId in arguments.assets ){
+			var asset = arguments.assets[ assetId ];
+			for( var dependentAssetId in asset.getDependents() ){
+				if ( arguments.assets.keyExists( dependentAssetId ) ) {
+					var dependentAsset = arguments.assets[ dependentAssetId ];
+
+					dependentAsset.dependsOn( assetId );
+				}
 			}
 		}
 	}
@@ -100,9 +114,9 @@ component output=false {
 		var wildcardRegex     = Replace( arguments.wildcard, "*", ".*?", "all" );
 		var expanded          = [];
 		var skippableKeys     = [ arguments.belongingToKey ];
-		var otherType         = ( arguments.type == "before" ) ? "after" : "before";
+		var otherType         = _getOppositeBeforeAfterOrDependencies( arguments.type );
 		var belongsTo         = arguments.assets[ arguments.belongingToKey ];
-		var possiblySkippable = ( otherType == "after" ? belongsTo.getAfter() : belongsTo.getBefore() )
+		var possiblySkippable = _getBeforeAfterOrDependencies( otherType, belongsTo );
 
 		for( var key in possiblySkippable ) {
 			if ( !key contains "*" ) {
@@ -112,7 +126,7 @@ component output=false {
 
 		for( var key in arguments.assets.keyArray() ){
 			var asset = arguments.assets[ key ];
-			var beforeOrAfter = arguments.type == "before" ? asset.getBefore() : asset.getAfter();
+			var beforeOrAfter = _getBeforeAfterOrDependencies( arguments.type, asset );
 
 			if ( beforeOrAfter.findNoCase( arguments.belongingToKey ) ) {
 				skippableKeys.append( key );
@@ -130,6 +144,35 @@ component output=false {
 		}
 
 		return expanded;
+	}
+
+
+	private array function _getBeforeAfterOrDependencies( required string type, required Asset asset ) output=false {
+		switch( arguments.type ){
+			case "before"     : return arguments.asset.getBefore();
+			case "after"      : return arguments.asset.getAfter();
+			case "dependsOn"  : return arguments.asset.getDependsOn();
+			case "dependents" : return arguments.asset.getDependents();
+		}
+	}
+
+
+	private void function _setBeforeAfterOrDependencies( required string type, required Asset asset, required array value ) output=false {
+		switch( arguments.type ){
+			case "before"     : arguments.asset.setBefore( arguments.value ); break;
+			case "after"      : arguments.asset.setAfter( arguments.value ); break;
+			case "dependsOn"  : arguments.asset.setDependsOn( arguments.value ); break;
+			case "dependents" : arguments.asset.setDependents( arguments.value ); break;
+		}
+	}
+
+	private string function _getOppositeBeforeAfterOrDependencies( required string type ) output=false {
+		switch( arguments.type ){
+			case "before"     : return "after";
+			case "after"      : return "before";
+			case "dependsOn"  : return "dependents";
+			case "dependents" : return "dependsOn";
+		}
 	}
 
 // GETTERS AND SETTERS
