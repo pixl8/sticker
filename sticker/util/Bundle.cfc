@@ -52,11 +52,13 @@ component output=false {
 			asset.url = arguments.url
 		}
 
-		asset.type   = arguments.type ?: ListLast( asset.url, "." );
-		asset.before = [];
-		asset.after  = [];
-		asset.ie     = arguments.ie;
-		asset.media  = arguments.media;
+		asset.type         = arguments.type ?: ListLast( asset.url, "." );
+		asset.before       = [];
+		asset.after        = [];
+		asset.dependsOn    = [];
+		asset.dependents   = [];
+		asset.ie           = arguments.ie;
+		asset.media        = arguments.media;
 
 		assetCollection[ arguments.id ] = new Asset( argumentCollection=asset );
 

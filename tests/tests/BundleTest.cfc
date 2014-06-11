@@ -27,8 +27,8 @@ component extends="testbox.system.BaseSpec"{
 				bundle.addAsset( id="somejs", path="/js/javascript.js" );
 
 				expect( _assetsToStruct( bundle.getAssets() ) ).toBe( {
-					  somejs = { type="js", path="/js/javascript.js", url="/assets/js/javascript.js", before=[], after=[], ie="", media="", renderedInclude="" }
-					, jquery = { type="js", path="", url="http://www.jquery.com/jquery.js", before=[], after=[], ie="", media="", renderedInclude="" }
+					  somejs = { type="js", path="/js/javascript.js", url="/assets/js/javascript.js", before=[], after=[], ie="", media="", renderedInclude="", dependsOn=[], dependents=[] }
+					, jquery = { type="js", path="", url="http://www.jquery.com/jquery.js", before=[], after=[], ie="", media="", renderedInclude="", dependsOn=[], dependents=[] }
 				} );
 			} );
 		} );
@@ -40,7 +40,7 @@ component extends="testbox.system.BaseSpec"{
 				bundle.addAsset( id="somejs", path="/js/subfolder/*-myfile.min.js" );
 
 				expect( _assetsToStruct( bundle.getAssets() ) ).toBe( {
-					  somejs = { type="js", path="/js/subfolder/fa56e8c-myfile.min.js", url="/assets/js/subfolder/fa56e8c-myfile.min.js", before=[], after=[], ie="", media="", renderedInclude="" }
+					  somejs = { type="js", path="/js/subfolder/fa56e8c-myfile.min.js", url="/assets/js/subfolder/fa56e8c-myfile.min.js", before=[], after=[], ie="", media="", renderedInclude="", dependsOn=[], dependents=[] }
 				} );
 			} );
 
@@ -66,7 +66,7 @@ component extends="testbox.system.BaseSpec"{
 				bundle.addAsset( id="jquery", url="http://www.jquery.com/jquery.js", ie="!IE", media="print" );
 
 				expect( _assetsToStruct( bundle.getAssets() ) ).toBe( {
-					jquery = { type="js", path="", url="http://www.jquery.com/jquery.js", before=[], after=[], ie="!IE", media="print", renderedInclude="" }
+					jquery = { type="js", path="", url="http://www.jquery.com/jquery.js", before=[], after=[], ie="!IE", media="print", renderedInclude="", dependsOn=[], dependents=[] }
 				} );
 			})
 
@@ -87,9 +87,9 @@ component extends="testbox.system.BaseSpec"{
 				);
 
 				expect( _assetsToStruct( bundle.getAssets() ) ).toBe( {
-					  some    = { type="css", path="/css/some.min.css"             , url="http://static.mysite.com/css/some.min.css"             , before=[], after=[], ie="", media="", renderedInclude="" }
-					, another = { type="css", path="/css/subfolder/another.min.css", url="http://static.mysite.com/css/subfolder/another.min.css", before=[], after=[], ie="", media="", renderedInclude="" }
-					, more    = { type="css", path="/css/subfolder/more.min.css"   , url="http://static.mysite.com/css/subfolder/more.min.css"   , before=[], after=[], ie="", media="", renderedInclude="" }
+					  some    = { type="css", path="/css/some.min.css"             , url="http://static.mysite.com/css/some.min.css"             , before=[], after=[], ie="", media="", renderedInclude="", dependsOn=[], dependents=[] }
+					, another = { type="css", path="/css/subfolder/another.min.css", url="http://static.mysite.com/css/subfolder/another.min.css", before=[], after=[], ie="", media="", renderedInclude="", dependsOn=[], dependents=[] }
+					, more    = { type="css", path="/css/subfolder/more.min.css"   , url="http://static.mysite.com/css/subfolder/more.min.css"   , before=[], after=[], ie="", media="", renderedInclude="", dependsOn=[], dependents=[] }
 				} );
 			} );
 
@@ -106,9 +106,9 @@ component extends="testbox.system.BaseSpec"{
 				);
 
 				expect( _assetsToStruct( bundle.getAssets() ) ).toBe( {
-					  some    = { type="css", path="/css/some.min.css"             , url="http://static.mysite.com/css/some.min.css"             , before=[], after=[], ie="", media="", renderedInclude="" }
-					, another = { type="css", path="/css/subfolder/another.min.css", url="http://static.mysite.com/css/subfolder/another.min.css", before=[], after=[], ie="", media="", renderedInclude="" }
-					, more    = { type="css", path="/css/subfolder/more.min.css"   , url="http://static.mysite.com/css/subfolder/more.min.css"   , before=[], after=[], ie="", media="", renderedInclude="" }
+					  some    = { type="css", path="/css/some.min.css"             , url="http://static.mysite.com/css/some.min.css"             , before=[], after=[], ie="", media="", renderedInclude="", dependsOn=[], dependents=[] }
+					, another = { type="css", path="/css/subfolder/another.min.css", url="http://static.mysite.com/css/subfolder/another.min.css", before=[], after=[], ie="", media="", renderedInclude="", dependsOn=[], dependents=[] }
+					, more    = { type="css", path="/css/subfolder/more.min.css"   , url="http://static.mysite.com/css/subfolder/more.min.css"   , before=[], after=[], ie="", media="", renderedInclude="", dependsOn=[], dependents=[] }
 				} );
 			} );
 
@@ -121,7 +121,7 @@ component extends="testbox.system.BaseSpec"{
 				bundle.addAsset( id="somejs", path="/js/subfolder/*-myfile.min.js" );
 
 				var asset = bundle.asset( "somejs" );
-				expect( asset.getMemento() ).toBe( { type="js", path="/js/subfolder/fa56e8c-myfile.min.js", url="/assets/js/subfolder/fa56e8c-myfile.min.js", before=[], after=[], ie="", media="", renderedInclude="" } );
+				expect( asset.getMemento() ).toBe( { type="js", path="/js/subfolder/fa56e8c-myfile.min.js", url="/assets/js/subfolder/fa56e8c-myfile.min.js", before=[], after=[], ie="", media="", renderedInclude="", dependsOn=[], dependents=[] } );
 			} );
 
 			it( "should throw a helpful error when passed id to the asset does not exist", function(){
@@ -151,10 +151,35 @@ component extends="testbox.system.BaseSpec"{
 					, ie              = ""
 					, media           = ""
 					, renderedInclude = ""
+					, dependsOn       = []
+					, dependents      = []
 				} );
 			} );
 
-		} )
+		} );
+
+		describe( "asset( 'someasset' ).dependsOn( 'list', 'of', 'assets' ).dependents( 'list', 'of', 'assets' )", function(){
+			it( "should populate the given asset's before, after, dependsOn and dependents arrays with passed values", function(){
+				var bundle = new sticker.util.Bundle( rootDirectory="/resources/bundles/bundle1", rootUrl="/assets/" );
+
+				bundle.addAsset( id="somejs", path="/js/subfolder/*-myfile.min.js" );
+
+				var asset = bundle.asset( "somejs" ).dependents( "assetx", "assety", "assetz" ).dependsOn( "asset1", "*" );
+
+				expect( asset.getMemento() ).toBe( {
+					  type            = "js"
+					, path            = "/js/subfolder/fa56e8c-myfile.min.js"
+					, url             = "/assets/js/subfolder/fa56e8c-myfile.min.js"
+					, before          = [ "assetx", "assety", "assetz" ]
+					, after           = [ "asset1", "*" ]
+					, dependsOn       = [ "asset1", "*" ]
+					, dependents      = [ "assetx", "assety", "assetz" ]
+					, ie              = ""
+					, media           = ""
+					, renderedInclude = ""
+				} );
+			} );
+		} );
 
 	}
 
