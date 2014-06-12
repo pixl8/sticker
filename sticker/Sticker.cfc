@@ -115,12 +115,15 @@ component output=false {
 	 *
 	 * @data.hint CFML Structure
 	 */
-	public Sticker function includeData( required struct data ) output=false {
+	public Sticker function includeData( required struct data, string group="default" ) output=false {
 		_checkReady();
 
 		var requestStorage = _getRequestStorage( "data" );
+		if ( !requestStorage.keyExists( arguments.group ) ){
+			requestStorage[ arguments.group ] = StructNew( "linked" );
+		}
 
-		requestStorage.append( arguments.data );
+		requestStorage[ arguments.group ].append( arguments.data );
 
 		return this;
 	}
@@ -149,8 +152,8 @@ component output=false {
 			if ( t == ( arguments.type ?: t ) ) {
 				if ( t == "js" ) {
 					var data = _getRequestStorage( "data" );
-					if ( !data.isEmpty() ) {
-						rendered &= new util.IncludeRenderer().renderData( data ) & Chr(13) & Chr(10);
+					if ( data.keyExists( arguments.group ) ) {
+						rendered &= new util.IncludeRenderer().renderData( data[ arguments.group ] ) & Chr(13) & Chr(10);
 					}
 				}
 				for( var asset in includes ){

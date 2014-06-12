@@ -200,6 +200,7 @@ component extends="testbox.system.BaseSpec"{
 			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
 			       .load();
 
+			sticker.includeData( { some="data that will live in default group and should not get rendered when asking for 'top' group" } );
 			sticker.include( assetId="jquery", group="top");
 			sticker.include( assetId="css-some", group="anotherGroup");
 
