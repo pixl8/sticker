@@ -18,25 +18,32 @@ component output=false {
 		assetKeys.sort( "textnocase" );
 		newOrder = Duplicate( assetKeys );
 
-		for( var i = 1; i < keyCount; i++ ){
-			for( var n=i+1; n <= keyCount; n++ ){
-				var key1                   = assetKeys[i];
-				var key2                   = assetKeys[n];
-				var pos1                   = newOrder.findNoCase( key1 );
-				var pos2                   = newOrder.findNoCase( key2 );
-				var key1ShouldBeBeforeKey2 = _isBefore( key1, key2, arguments.assets );
+		// a bubble sort
+		var orderChanged = false;
+		do {
+			orderChanged = false;
+			for( var i = 1; i < keyCount; i++ ){
+				for( var n=i+1; n <= keyCount; n++ ){
+					var key1                   = assetKeys[i];
+					var key2                   = assetKeys[n];
+					var pos1                   = newOrder.findNoCase( key1 );
+					var pos2                   = newOrder.findNoCase( key2 );
+					var key1ShouldBeBeforeKey2 = _isBefore( key1, key2, arguments.assets );
 
-				if ( !IsNull( key1ShouldBeBeforeKey2 ) ) {
-					if ( key1ShouldBeBeforeKey2 && pos1 > pos2 ) {
-						newOrder.deleteAt( pos1 );
-						newOrder.insertAt( pos2, key1 );
-					} elseif ( !key1ShouldBeBeforeKey2 && pos2 > pos1 ) {
-						newOrder.deleteAt( pos2 );
-						newOrder.insertAt( pos1, key2 );
+					if ( !IsNull( key1ShouldBeBeforeKey2 ) ) {
+						if ( key1ShouldBeBeforeKey2 && pos1 > pos2 ) {
+							orderChanged = true;
+							newOrder.deleteAt( pos1 );
+							newOrder.insertAt( pos2, key1 );
+						} elseif ( !key1ShouldBeBeforeKey2 && pos2 > pos1 ) {
+							orderChanged = true;
+							newOrder.deleteAt( pos2 );
+							newOrder.insertAt( pos1, key2 );
+						}
 					}
 				}
 			}
-		}
+		} while ( orderChanged );
 
 		return newOrder;
 	}
