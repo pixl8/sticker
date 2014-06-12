@@ -71,14 +71,14 @@ component extends="testbox.system.BaseSpec"{
 					},
 					"css-subfolder-more"={
 						  before          = ["subfolder-another"]
-						, after           = []
+						, after           = ["css-some"]
 						, path            = "/css/subfolder/more.min.css"
 						, url             = "http://bundle2.com/assets/css/subfolder/more.min.css"
 						, type            = "css"
 						, ie              = ""
 						, media           = ""
 						, renderedInclude = ""
-						, dependsOn       = []
+						, dependsOn       = ["css-some"]
 						, dependents      = []
 					},
 					"jquery"={

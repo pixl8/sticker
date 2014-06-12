@@ -33,7 +33,7 @@ component output=false {
 
 		bundle.asset( "jquery-ui-css"      ).before( "*" );
 		bundle.asset( "css-some"           ).before( "*" ).dependsOn( "jquery-ui-css" );
-		bundle.asset( "css-subfolder-more" ).before( "subfolder-another" );
+		bundle.asset( "css-subfolder-more" ).before( "subfolder-another" ).dependsOn( "css-some" );
 		bundle.asset( "js-someplugin"      ).dependents( "jquery" );
 	}
 

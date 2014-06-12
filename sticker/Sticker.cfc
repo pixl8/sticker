@@ -99,9 +99,6 @@ component output=false {
 			}
 
 			requestedIncludes[ arguments.group ][ arguments.assetId ] = "";
-			for( var asset in assets[ arguments.assetId ].getDependsOn() ){
-				requestedIncludes[ arguments.group ][ asset ] = "";
-			}
 
 			return this;
 		}
@@ -139,7 +136,10 @@ component output=false {
 		var assets        = _getAssets();
 		var rendered      = "";
 
-		includes = ( includes[ arguments.group ] ?: {} ).keyArray();
+		includes = ( includes[ arguments.group ] ?: {} );
+
+		_addIncludeDependencies( includes );
+		includes = includes.keyArray();
 
 		includes.sort( function( a, b ){
 			return fullSortOrder.find( a ) < fullSortOrder.find( b ) ? -1 : 1;
@@ -181,6 +181,27 @@ component output=false {
 		}
 
 		return request[ key ][ arguments.key ];
+	}
+
+	private void function _addIncludeDependencies( required struct includes ) output=false {
+		for( var assetId in arguments.includes ){
+			for( var dependencyAssetId in _getDependencies( assetId=assetId, ignore=arguments.includes.keyArray() ) ){
+				arguments.includes[ dependencyAssetId ] = "";
+			}
+		}
+	}
+
+	private array function _getDependencies( required string assetId, required array ignore, array dependencies=[] ) output=false {
+		var assets = _getAssets();
+
+		for( var dependencyAssetId in assets[ arguments.assetId ].getDependsOn() ) {
+			if ( !ignore.find( dependencyAssetId ) && !arguments.dependencies.find( dependencyAssetId ) ) {
+				arguments.dependencies.append( dependencyAssetId );
+				arguments.dependencies = _getDependencies( dependencyAssetId, arguments.ignore, arguments.dependencies );
+			}
+		}
+
+		return arguments.dependencies;
 	}
 
 // GETTERS and SETTERS

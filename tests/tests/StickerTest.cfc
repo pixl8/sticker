@@ -182,11 +182,12 @@ component extends="testbox.system.BaseSpec"{
 			       .load();
 
 			sticker.include( "jquery" )
-			       .include( "css-some" );
+			       .include( "css-subfolder-more" );
 
 			expect( sticker.renderIncludes() ).toBe(
 				'<link rel="stylesheet" type="text/css" href="http://jquery.com/jqueryui.min.css">' & Chr(13) & Chr(10) &
 				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/some.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/subfolder/more.min.css">' & Chr(13) & Chr(10) &
 				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
 				'<script src="http://jquery.com/jquery.js"></script>' & Chr(13) & Chr(10)
 			);
