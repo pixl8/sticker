@@ -136,17 +136,19 @@ component output=false {
 	public string function renderIncludes( string type, string group="default" ) output=false {
 		var includes      = _getRequestStorage();
 		var fullSortOrder = _getSortOrder();
+		var ordered       = [];
 		var assets        = _getAssets();
 		var rendered      = "";
 
 		includes = ( includes[ arguments.group ] ?: {} );
 
 		_addIncludeDependencies( includes );
-		includes = includes.keyArray();
 
-		includes.sort( function( a, b ){
-			return fullSortOrder.find( a ) < fullSortOrder.find( b ) ? -1 : 1;
-		} );
+		for( var assetid in fullSortOrder ){
+			if ( includes.keyExists( assetId ) ) {
+				ordered.append( assetId );
+			}
+		}
 
 		for( var t in [ "css", "js" ] ){
 			if ( t == ( arguments.type ?: t ) ) {
@@ -156,7 +158,7 @@ component output=false {
 						rendered &= new util.IncludeRenderer().renderData( data[ arguments.group ] ) & Chr(13) & Chr(10);
 					}
 				}
-				for( var asset in includes ){
+				for( var asset in ordered ){
 					if ( assets[ asset ].getType() == t ){
 						rendered &= assets[ asset ].getRenderedInclude() & Chr(13) & Chr(10);
 					}
