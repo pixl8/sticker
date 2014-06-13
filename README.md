@@ -10,3 +10,7 @@ Sticker is a per-request static asset inclusion tool for the Railo language. Its
 * Issues can be searched and raised in GitHub: [https://github.com/pixl8/sticker/issues](https://github.com/pixl8/sticker/issues)
 
 Contribution in all forms (raising issues, feature requests, pull requests, documentation) is heartely welcome and will be attributed :)
+
+## Contributions
+
+[@nodoherty](https://github.com/nodoherty) - Documentation
