@@ -13,4 +13,4 @@ Contribution in all forms (raising issues, feature requests, pull requests, docu
 
 ## Contributions
 
-[@nodoherty](https://github.com/nodoherty) - Documentation
+[@nodoherty](https://github.com/nodoherty)
