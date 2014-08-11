@@ -18,7 +18,7 @@
 	<property name="railo40.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.0.4.001-nojre.tar.gz" />
 	<property name="railo41.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.1.2.005-nojre.tar.gz" />
 	<property name="railo42beta.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.2.0.000-nojre.tar.gz" />
-	<property name="test.framework.url" value="http://integration.staging.ortussolutions.com/artifacts/testbox/2.0.0/testbox_2.0.0.zip" />
+	<property name="test.framework.url" value="http://downloads.ortussolutions.com/ortussolutions/testbox/2.0.0/testbox-2.0.0.zip" />
 	<property name="source" value="remote" />
 
 	<property name="railo40.helper" value="railo" />
