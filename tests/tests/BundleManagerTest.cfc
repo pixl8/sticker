@@ -25,7 +25,7 @@ component extends="testbox.system.BaseSpec"{
 
 			it( "should forward passed config struct to the bundle's Configure method", function(){
 				var assets = manager.addBundle( rootDirectory="/resources/bundles/bundle1", rootUrl="http://bundle1.com/assets", config={ skipAllAssets=true } ).getAssets();
-				expect( assets.count() ).toBe( 0 );
+				expect( StructIsEmpty( assets ) ).toBeTrue();
 			} );
 
 		} );
