@@ -23,7 +23,7 @@ component output=false {
 	 * @rootDirectory.hint Root directory of the bundle, must contain a StickerBundle.cfc configuration file in its root
 	 * @rootUrl.hint       URL that maps to the directory
 	 */
-	public BundleManager function addBundle( required string rootDirectory, required string rootUrl, string rootComponentPath ) output=false {
+	public BundleManager function addBundle( required string rootDirectory, required string rootUrl, string rootComponentPath, struct config={} ) output=false {
 		var bundles       = _getBundles();
 		var bundle        = new Bundle( rootDirectory=arguments.rootDirectory, rootUrl=arguments.rootUrl );
 		var configCfcPath = arguments.rootComponentPath ?: _convertDirectoryToComponentPath( arguments.rootDirectory );
@@ -35,7 +35,7 @@ component output=false {
 			throw( type="Sticker.missingStickerBundle", message="No StickerBundle.cfc file found at [#arguments.rootDirectory#]" );
 		}
 
-		CreateObject( configCfcPath ).configure( bundle );
+		CreateObject( configCfcPath ).configure( bundle, arguments.config );
 
 		bundles.append( bundle );
 		_setBundles( bundles );

@@ -23,6 +23,11 @@ component extends="testbox.system.BaseSpec"{
 				}).toThrow( type="Sticker.missingStickerBundle" );
 			} );
 
+			it( "should forward passed config struct to the bundle's Configure method", function(){
+				var assets = manager.addBundle( rootDirectory="/resources/bundles/bundle1", rootUrl="http://bundle1.com/assets", config={ skipAllAssets=true } ).getAssets();
+				expect( assets.count() ).toBe( 0 );
+			} );
+
 		} );
 
 		describe( "calling addBundle() multiple times followed by getAssets()", function(){

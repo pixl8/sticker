@@ -1,6 +1,11 @@
 component output=false {
 
-	public function configure( bundle ) output=false {
+	public function configure( bundle, config ) output=false {
+		var skipAssets = arguments.config.skipAllAssets ?: "";
+
+		if ( IsBoolean( skipAssets ) && skipAssets ) {
+			return;
+		}
 
 		bundle.addAsset(
 			  id   = "jquery"
