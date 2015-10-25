@@ -137,11 +137,8 @@ Valid values are:
 			<equals arg1="${tag}" arg2="" />
 			<then>
 				<switch value="${branch}">
-					<case value="master">
+					<case value="stable">
 						<property name="release.name" value="stable" />
-					</case>
-					<case value="develop">
-						<property name="release.name" value="bleeding-edge" />
 					</case>
 					<default>
 						<property name="release.name" value="${branch}" />
