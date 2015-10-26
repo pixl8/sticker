@@ -4,35 +4,8 @@
 
 	<property file="build.properties" />
 
-	<property name="test.project" value="sticker-ci" />
-	<property name="test.framework" value="testbox" />
-	<property name="work.dir" value="/tmp/work" />
-	<property name="build.dir" value="" />
-	<property name="server.name" value="localhost"/>
-	<property name="server.port" value="8888"/>
-	<property name="stop.port" value="8887"/>
-	<property name="output.dir" value="./results"/>
 	<property name="artifacts.dir" value="./artifacts" />
 	<property name="build.number.file" value="${artifacts.dir}/sticker.build.number" />
-
-	<property name="railo40.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.0.4.001-nojre.tar.gz" />
-	<property name="railo41.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.1.2.005-nojre.tar.gz" />
-	<property name="railo42beta.remote.url" value="http://cfml-ci.s3.amazonaws.com/railo-express-4.2.0.000-nojre.tar.gz" />
-	<property name="test.framework.url" value="http://downloads.ortussolutions.com/ortussolutions/testbox/2.0.0/testbox-2.0.0.zip" />
-	<property name="source" value="remote" />
-
-	<property name="railo40.helper" value="railo" />
-	<property name="railo41.helper" value="railo" />
-	<property name="railo41-osx.helper" value="railo" />
-	<property name="railo42beta.helper" value="railo" />
-
-	<macrodef name="propertycopy">
-		<attribute name="name"/>
-		<attribute name="from"/>
-		<sequential>
-			<property name="@{name}" value="${@{from}}"/>
-		</sequential>
-	</macrodef>
 
 	<path id="cp">
 		<fileset dir="lib">
@@ -41,7 +14,7 @@
 	</path>
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="cp" />
 
-	<target name="build" depends="setupartifactsdir,setupoutputdir,setupreleaselabel">
+	<target name="build" depends="setupartifactsdir,setupreleaselabel">
 		<concat destfile="../sticker/${build.label}">Built on ${start.TODAY}</concat>
 		<copy file="../LICENSE" tofile="../sticker/LICENSE" />
 		<copy file="../README.md" tofile="../sticker/README.md" />
@@ -56,77 +29,9 @@
 		<delete file="../sticker/README.md" failonerror="false" />
 	</target>
 
-	<target name="install-ci-deps" depends="setupTestRunnerEnvironment">
-		<exec executable="/bin/bash" failonerror="true">
-			<env key="WORK_DIR" value="${work.dir}" />
-			<env key="BUILD_DIR" value="${build.dir}" />
-			<env key="TESTFRAMEWORK" value="${test.framework}" />
-      		<env key="TESTFRAMEWORK_URL" value="${test.framework.url}" />
-			<env key="PLATFORM_URL" value="${platform.url}" />
-			<env key="SERVER_PORT" value="${server.port}" />
-			<env key="STOP_PORT" value="${stop.port}" />
-			<arg line="scripts/ci-helper-${platform.helper}.sh install ${test.project}"/>
-		</exec>
-	</target>
-
-	<target name="setup-railo-settings">
-		<mkdir dir="${work.dir}/railo" />
-		<mkdir dir="${work.dir}/railo/webapps" />
-		<mkdir dir="${work.dir}/railo/webapps/www" />
-		<mkdir dir="${work.dir}/railo/webapps/www/WEB-INF" />
-		<mkdir dir="${work.dir}/railo/webapps/www/WEB-INF/railo" />
-		<copy file="railo-web.xml.cfm" todir="${work.dir}/railo/webapps/www/WEB-INF/railo" />
-	</target>
-
-	<target name="start-server" depends="setup-railo-settings">
-		<exec executable="/bin/bash" spawn="false" failonerror="true" outputproperty="output.log">
-			<env key="WORK_DIR" value="${work.dir}" />
-			<env key="BUILD_DIR" value="${build.dir}" />
-			<env key="SERVER_PORT" value="${server.port}" />
-			<arg line="scripts/ci-helper-${platform.helper}.sh start"/>
-		</exec>
-	</target>
-
-	<target name="stop-server">
-		<exec executable="/bin/bash" spawn="false" failonerror="true" outputproperty="output.log">
-			<env key="WORK_DIR" value="${work.dir}" />
-			<env key="BUILD_DIR" value="${build.dir}" />
-			<env key="SERVER_PORT" value="${server.port}" />
-			<arg line="scripts/ci-helper-${platform.helper}.sh stop"/>
-		</exec>
-	</target>
-
-	<target name="test-ci" depends="setupTestRunnerEnvironment,setupoutputdir,start-server,test,stop-server">
-		<property file="${output.dir}/testbox.properties" />
-		<fail if="testbox.failed" message="At least one test failure!" />
-	</target>
-
-	<target name="setupoutputdir">
-		<delete dir="${output.dir}"/>
-		<mkdir dir="${output.dir}"/>
-	</target>
 	<target name="setupartifactsdir">
 		<delete dir="${artifacts.dir}"/>
 		<mkdir dir="${artifacts.dir}"/>
-	</target>
-
-	<target name="test">
-		<get dest="${output.dir}/results.txt" src="http://${server.name}:${server.port}/${test.project}/build/test-suite-runner.cfm" verbose="true" />
-    	<concat><path path="${output.dir}/output.txt" /></concat>
-	</target>
-
-	<target name="setupTestRunnerEnvironment">
-		<fail unless="platform" message="Platform is not set" />
-		<fail unless="${platform}.${source}.url">Unkown platform ${platform} for source ${source}.
-
-Valid values are:
- railo40
- railo41
- railo41-osx
- railo42beta
-		</fail>
-		<propertycopy name="platform.url" from="${platform}.${source}.url" />
-		<propertycopy name="platform.helper" from="${platform}.helper" />
 	</target>
 
 	<target name="setupreleaselabel" depends="incrementBuildNumber">

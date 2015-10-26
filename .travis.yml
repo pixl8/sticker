@@ -1,12 +1,14 @@
 language: java
-env:
-  matrix:
-  - PLATFORM=railo41 TARGET=test-ci
-  - PLATFORM=railo42beta TARGET=test-ci
-  - PLATFORM=railo42beta TARGET=build
-
-install: ant -f build/build.xml -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM install-ci-deps
-script: ant -f build/build.xml -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM -Dbranch=$TRAVIS_BRANCH -Dtag=$TRAVIS_TAG $TARGET
+before_install:
+- mkdir /tmp/bin
+- export PATH=$PATH:/tmp/bin
+install:
+- curl --location 'https://www.ortussolutions.com/parent/download/commandbox/type/bin' -o /tmp/box.zip
+- unzip /tmp/box.zip -d /tmp/bin
+- /tmp/bin/box install
+script:
+- "./test"
+- ant -f build/build.xml -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM -Dbranch=$TRAVIS_BRANCH -Dtag=$TRAVIS_TAG $TARGET
 
 deploy:
   provider: s3
