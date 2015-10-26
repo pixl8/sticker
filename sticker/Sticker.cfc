@@ -3,7 +3,7 @@
  * to work with Sticker.
  *
  */
-component output=false {
+component {
 
 // CONSTRUCTOR
 
@@ -11,7 +11,7 @@ component output=false {
 	 * I am the Sticker constructor
 	 *
 	 */
-	public Sticker function init() output=false {
+	public Sticker function init() {
 		_setBundleManager( new util.BundleManager( )         );
 		_setAssets       ( {}                                );
 		_setSortOrder    ( []                                );
@@ -30,7 +30,7 @@ component output=false {
 	 * @rootDirectory.hint Root directory of the bundle, must contain a StickerBundle.cfc configuration file
 	 * @rootUrl.hint       URL that maps to the directory
 	 */
-	public Sticker function addBundle( required string rootDirectory, required string rootUrl ) output=false {
+	public Sticker function addBundle( required string rootDirectory, required string rootUrl ) {
 		_getBundleManager().addBundle( argumentCollection = arguments );
 		_setReady( false );
 
@@ -42,7 +42,7 @@ component output=false {
 	 * and doing any other leg work such as ensuring the correct order
 	 * of assets
 	 */
-	public Sticker function load() output=false {
+	public Sticker function load() {
 		var assets = _getBundleManager().getAssets();
 
 		new util.IncludeRenderer().addRenderedIncludesToAssets( assets );
@@ -58,7 +58,7 @@ component output=false {
 	 * I return whether or not the API is ready for use (i.e.
 	 * has load() been called since the last addBundle() call)
 	 */
-	public boolean function ready() output=false {
+	public boolean function ready() {
 		return _getReady();
 	}
 
@@ -67,7 +67,7 @@ component output=false {
 	 *
 	 * @assetId.hint ID of the asset as defined in any of the sticker bundle's configuration files
 	 */
-	public string function getAssetUrl( required string assetId ) output=false {
+	public string function getAssetUrl( required string assetId ) {
 		_checkReady();
 
 		var assets = _getAssets();
@@ -86,7 +86,7 @@ component output=false {
 	 * @assetId.hint ID of the asset as defined in any of the sticker bundles' config file
 	 * @throwOnMissing.hint Whether or not to throw an error when the asset does not exist, default=true
 	 */
-	public Sticker function include( required string assetId, boolean throwOnMissing=true, string group="default" ) output=false {
+	public Sticker function include( required string assetId, boolean throwOnMissing=true, string group="default" ) {
 		_checkReady();
 
 		var assets = _getAssets();
@@ -115,7 +115,7 @@ component output=false {
 	 *
 	 * @data.hint CFML Structure
 	 */
-	public Sticker function includeData( required struct data, string group="default" ) output=false {
+	public Sticker function includeData( required struct data, string group="default" ) {
 		_checkReady();
 
 		var requestStorage = _getRequestStorage( "data" );
@@ -133,7 +133,7 @@ component output=false {
 	 * I ensure all includes are rendered in the correct order
 	 *
 	 */
-	public string function renderIncludes( string type, string group="default" ) output=false {
+	public string function renderIncludes( string type, string group="default" ) {
 		var includes      = _getRequestStorage();
 		var fullSortOrder = _getSortOrder();
 		var ordered       = [];
@@ -170,13 +170,13 @@ component output=false {
 	}
 
 // PRIVATE UTILITY
-	private void function _checkReady() output=false {
+	private void function _checkReady() {
 		if ( !ready() ) {
 			throw( type="Sticker.notReady", message="The sticker API instance has not yet been loaded. Please use the load() method before calling any of the per-request inclusion methods" );
 		}
 	}
 
-	private struct function _getRequestStorage( string key="includes" ) output=false {
+	private struct function _getRequestStorage( string key="includes" ) {
 		var key = _getRequestKey();
 		if ( !request.keyExists( key ) ) {
 			request[ key ] = {
@@ -188,7 +188,7 @@ component output=false {
 		return request[ key ][ arguments.key ];
 	}
 
-	private void function _addIncludeDependencies( required struct includes ) output=false {
+	private void function _addIncludeDependencies( required struct includes ) {
 		for( var assetId in arguments.includes ){
 			for( var dependencyAssetId in _getDependencies( assetId=assetId, ignore=arguments.includes.keyArray() ) ){
 				arguments.includes[ dependencyAssetId ] = "";
@@ -196,7 +196,7 @@ component output=false {
 		}
 	}
 
-	private array function _getDependencies( required string assetId, required array ignore, array dependencies=[] ) output=false {
+	private array function _getDependencies( required string assetId, required array ignore, array dependencies=[] ) {
 		var assets = _getAssets();
 
 		for( var dependencyAssetId in assets[ arguments.assetId ].getDependsOn() ) {
@@ -210,38 +210,38 @@ component output=false {
 	}
 
 // GETTERS and SETTERS
-	private BundleManager function _getBundleManager() output=false {
+	private BundleManager function _getBundleManager() {
 		return _bundleManager;
 	}
-	private void function _setBundleManager( required BundleManager bundleManager ) output=false {
+	private void function _setBundleManager( required BundleManager bundleManager ) {
 		_bundleManager = arguments.bundleManager;
 	}
 
-	private struct function _getAssets() output=false {
+	private struct function _getAssets() {
 		return _assets;
 	}
-	private void function _setAssets( required struct assets ) output=false {
+	private void function _setAssets( required struct assets ) {
 		_assets = arguments.assets;
 	}
 
-	private array function _getSortOrder() output=false {
+	private array function _getSortOrder() {
 		return _sortOrder;
 	}
-	private void function _setSortOrder( required array sortOrder ) output=false {
+	private void function _setSortOrder( required array sortOrder ) {
 		_sortOrder = arguments.sortOrder;
 	}
 
-	private boolean function _getReady() output=false {
+	private boolean function _getReady() {
 		return _ready;
 	}
-	private void function _setReady( required boolean ready ) output=false {
+	private void function _setReady( required boolean ready ) {
 		_ready = arguments.ready;
 	}
 
-	private string function _getRequestKey() output=false {
+	private string function _getRequestKey() {
 		return _requestKey;
 	}
-	private void function _setRequestKey( required string requestKey ) output=false {
+	private void function _setRequestKey( required string requestKey ) {
 		_requestKey = arguments.requestKey;
 	}
 }

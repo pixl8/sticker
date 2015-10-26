@@ -1,6 +1,6 @@
-component output=false {
+component {
 
-	public function configure( bundle ) output=false {
+	public function configure( bundle ) {
 
 		bundle.addAsset(
 			  id   = "jquery-ui-css"

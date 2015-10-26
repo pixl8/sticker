@@ -1,7 +1,7 @@
 Sticker
 =======
 
-[![Build Status](https://travis-ci.org/pixl8/sticker.svg?branch=master)](https://travis-ci.org/pixl8/sticker)
+[![Build Status](https://travis-ci.org/pixl8/sticker.svg?branch=stable)](https://travis-ci.org/pixl8/sticker)
 
 Sticker is a per-request static asset inclusion tool for the Lucee language. Its aim is to create a simple and consistent API for including JavaScript and CSS assets from multiple sources.
 
@@ -10,6 +10,15 @@ Sticker is a per-request static asset inclusion tool for the Lucee language. Its
 * Issues can be searched and raised in GitHub: [https://github.com/pixl8/sticker/issues](https://github.com/pixl8/sticker/issues)
 
 Contribution in all forms (raising issues, feature requests, pull requests, documentation) is heartely welcome and will be attributed :)
+
+## Tests
+
+The test suite can be run on unix based systems with:
+
+    box install
+    ./test
+
+Pushes to the GitHub repository will trigger a test run and zip file build of the project that will be posted to the [PresideCMS download site](http://downloads.presidecms.com/#!/sticker%2F).
 
 ## Contributions
 
