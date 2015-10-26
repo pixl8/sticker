@@ -1,7 +1,7 @@
 Sticker
 =======
 
-[![Build Status](https://travis-ci.org/pixl8/sticker.svg?branch=master)](https://travis-ci.org/pixl8/sticker)
+[![Build Status](https://travis-ci.org/pixl8/sticker.svg?branch=stable)](https://travis-ci.org/pixl8/sticker)
 
 Sticker is a per-request static asset inclusion tool for the Lucee language. Its aim is to create a simple and consistent API for including JavaScript and CSS assets from multiple sources.
 
