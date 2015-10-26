@@ -13,10 +13,6 @@
     "slug":"sticker",
     "shortDescription":"Sticker is a per-request static asset inclusion tool for the Lucee language. Its aim is to create a simple and consistent API for including JavaScript and CSS assets from multiple sources.",
     "description":"Sticker is a per-request static asset inclusion tool for the Lucee language. Its aim is to create a simple and consistent API for including JavaScript and CSS assets from multiple sources.",
-    "instructions":"",
-    "changelog":"",
-    "type":"",
-    "keywords":"",
     "private":false,
     "engines":[
         {
@@ -24,57 +20,16 @@
             "version":">=4.1.x"
         }
     ],
-    "defaultEngine":"",
-    "defaultPort":0,
-    "projectURL":"",
     "license":[
         {
             "type":"MIT",
             "URL":"https://github.com/pixl8/sticker/blob/stable/LICENSE"
         }
     ],
-    "contributors":[
-        
-    ],
-    "dependencies":{
-        
-    },
     "devDependencies":{
         "testbox":"2.2.0"
     },
     "installPaths":{
         "testbox":"tests/testbox"
-    },
-    "ignore":[
-        
-    ],
-    "testbox":{
-        "runner":[
-            {
-                "default":""
-            }
-        ],
-        "labels":[
-            
-        ],
-        "reporter":"",
-        "reporterResults":"",
-        "bundles":[
-            ""
-        ],
-        "directory":{
-            "mapping":"",
-            "recurse":true
-        },
-        "watchers":[
-            
-        ],
-        "notify":{
-            "emails":[
-                
-            ],
-            "growl":"",
-            "URL":""
-        }
     }
 }
