@@ -21,5 +21,3 @@ deploy:
   skip_cleanup: true
   on:
     repo: pixl8/sticker
-    condition: "$TARGET = build"
-    all_branches: true
