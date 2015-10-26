@@ -3,7 +3,7 @@
  *
  */
 
-component output=false {
+component {
 
 
 	/**
@@ -17,7 +17,7 @@ component output=false {
 		  required string  href
 		,          string  media                = ""
 		,          boolean includeTrailingSlash = false
-	) output=false {
+	) {
 		var rendered = '<link rel="stylesheet" type="text/css" href="#arguments.href#"';
 
 		if ( Len( Trim( arguments.media ) ) ) {
@@ -35,7 +35,7 @@ component output=false {
 	 *
 	 * @src.hint The URL of the javacript to include
 	 */
-	public string function renderJsInclude( required string src ) output=false {
+	public string function renderJsInclude( required string src ) {
 		return '<script src="#arguments.src#"></script>';
 	}
 
@@ -44,7 +44,7 @@ component output=false {
 	 *
 	 * @data.hint Structure of data to be available to javascript
 	 */
-	public string function renderData( required struct data, string variableName="cfrequest" ) output=false {
+	public string function renderData( required struct data, string variableName="cfrequest" ) {
 		return '<script>#arguments.variableName#=#SerializeJson( arguments.data )#</script>';
 	}
 
@@ -54,7 +54,7 @@ component output=false {
 	 * @content.hint The content, i.e. a script or link tag, to be wrapped
 	 * @condition.hint The condition with which to wrap the content, e.g. "IE lt 7" or "!IE"
 	 */
-	public string function wrapWithIeConditional( required string content, required string condition ) output=false {
+	public string function wrapWithIeConditional( required string content, required string condition ) {
 		if ( arguments.condition == "!IE" ) {
 			return '<!--[if #arguments.condition#]>-->#arguments.content#<!-- <![endif]-->';
 		}
@@ -66,7 +66,7 @@ component output=false {
 	 *
 	 * @assets.hint A collection of sticker assets
 	 */
-	public struct function addRenderedIncludesToAssets( required struct assets ) output=false {
+	public struct function addRenderedIncludesToAssets( required struct assets ) {
 		for ( var assetId in arguments.assets ) {
 			var asset    = arguments.assets[ assetId ];
 			var rendered = asset.getType() == "js" ? renderJsInclude( asset.getUrl() ) : renderCssInclude( href=asset.getUrl(), media=asset.getMedia() );

@@ -2,14 +2,14 @@
  * I manage the collecting and parsing of any number of sticker bundles
  *
  */
-component output=false {
+component {
 
 // CONSTRUCTOR
 
 	/**
 	 * I am the constructor
 	 */
-	public BundleManager function init() output=false {
+	public BundleManager function init() {
 		_setBundles( [] );
 		return this;
 	}
@@ -23,7 +23,7 @@ component output=false {
 	 * @rootDirectory.hint Root directory of the bundle, must contain a StickerBundle.cfc configuration file in its root
 	 * @rootUrl.hint       URL that maps to the directory
 	 */
-	public BundleManager function addBundle( required string rootDirectory, required string rootUrl, string rootComponentPath, struct config={} ) output=false {
+	public BundleManager function addBundle( required string rootDirectory, required string rootUrl, string rootComponentPath, struct config={} ) {
 		var bundles       = _getBundles();
 		var bundle        = new Bundle( rootDirectory=arguments.rootDirectory, rootUrl=arguments.rootUrl );
 		var configCfcPath = arguments.rootComponentPath ?: _convertDirectoryToComponentPath( arguments.rootDirectory );
@@ -47,7 +47,7 @@ component output=false {
 	 * I return a merged asset set based on all the bundles
 	 *
 	 */
-	public struct function getAssets() output=false {
+	public struct function getAssets() {
 		var bundles = _getBundles();
 		var assets  = {};
 
@@ -62,13 +62,13 @@ component output=false {
 	}
 
 // PRIVATE HELPERS
-	private string function _convertDirectoryToComponentPath( required string directory ) output=false {
+	private string function _convertDirectoryToComponentPath( required string directory ) {
 		var trimmed = ReReplace( arguments.directory, "^\/?(.*?)\/?$", "\1" );
 
 		return Replace( trimmed, "/", ".", "all" );
 	}
 
-	private void function _expandWildcards( required struct assets ) output=false {
+	private void function _expandWildcards( required struct assets ) {
 		var types = [ "before", "after", "dependsOn", "dependents" ];
 
 		for( var assetKey in arguments.assets ){
@@ -97,7 +97,7 @@ component output=false {
 		}
 	}
 
-	private void function _mapDependencies( required struct assets ) output=false {
+	private void function _mapDependencies( required struct assets ) {
 		for( var assetId in arguments.assets ){
 			var asset = arguments.assets[ assetId ];
 			for( var dependentAssetId in asset.getDependents() ){
@@ -110,7 +110,7 @@ component output=false {
 		}
 	}
 
-	private array function _expandWildcard( required string wildcard, required struct assets, required string belongingToKey, required string type ) output=false {
+	private array function _expandWildcard( required string wildcard, required struct assets, required string belongingToKey, required string type ) {
 		var wildcardRegex     = Replace( arguments.wildcard, "*", ".*?", "all" );
 		var expanded          = [];
 		var skippableKeys     = [ arguments.belongingToKey ];
@@ -147,7 +147,7 @@ component output=false {
 	}
 
 
-	private array function _getBeforeAfterOrDependencies( required string type, required Asset asset ) output=false {
+	private array function _getBeforeAfterOrDependencies( required string type, required Asset asset ) {
 		switch( arguments.type ){
 			case "before"     : return arguments.asset.getBefore();
 			case "after"      : return arguments.asset.getAfter();
@@ -157,7 +157,7 @@ component output=false {
 	}
 
 
-	private void function _setBeforeAfterOrDependencies( required string type, required Asset asset, required array value ) output=false {
+	private void function _setBeforeAfterOrDependencies( required string type, required Asset asset, required array value ) {
 		switch( arguments.type ){
 			case "before"     : arguments.asset.setBefore( arguments.value ); break;
 			case "after"      : arguments.asset.setAfter( arguments.value ); break;
@@ -166,7 +166,7 @@ component output=false {
 		}
 	}
 
-	private string function _getOppositeBeforeAfterOrDependencies( required string type ) output=false {
+	private string function _getOppositeBeforeAfterOrDependencies( required string type ) {
 		switch( arguments.type ){
 			case "before"     : return "after";
 			case "after"      : return "before";
@@ -176,7 +176,7 @@ component output=false {
 	}
 
 // GETTERS AND SETTERS
-	private array function _getBundles() output=false {
+	private array function _getBundles() {
 		return _bundles;
 	}
 	private void function _setBundles( required array Bundles ) outputbfalse {

@@ -1,4 +1,4 @@
-component output=false {
+component {
 	this.mappings[ "/sticker"   ] = ExpandPath( "../sticker"  );
 	this.mappings[ "/resources" ] = ExpandPath( "./resources" );
 	this.mappings[ "/testbox"   ] = ExpandPath( "./testbox"   );

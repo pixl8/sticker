@@ -185,7 +185,7 @@ component extends="testbox.system.BaseSpec"{
 
 /************************************ PRIVATE HELPERS ***************************************/
 
-	private struct function _assetsToStruct( required struct assets ) output=false {
+	private struct function _assetsToStruct( required struct assets ) {
 		var a = {};
 
 		for( var asset in arguments.assets ){

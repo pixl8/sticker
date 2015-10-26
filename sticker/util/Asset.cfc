@@ -1,7 +1,7 @@
 /**
  * I am an Asset bean, I represent a single asset in a bundle
  */
-component accessors=true output=false {
+component accessors=true {
 
 	property name="type"            type="string";
 	property name="url"             type="string";
@@ -15,7 +15,7 @@ component accessors=true output=false {
 	property name="ie"              type="string" default="";
 	property name="media"           type="string" default="";
 
-	public Asset function before() output=false {
+	public Asset function before() {
 		var bf = getBefore();
 		for( var i=1; i <= arguments.len(); i++ ) {
 			bf.append( arguments[ i ] );
@@ -24,7 +24,7 @@ component accessors=true output=false {
 		return this;
 	}
 
-	public Asset function after() output=false {
+	public Asset function after() {
 		var af = getAfter();
 		for( var i=1; i <= arguments.len(); i++ ) {
 			af.append( arguments[ i ] );
@@ -33,7 +33,7 @@ component accessors=true output=false {
 		return this;
 	}
 
-	public Asset function dependents() output=false {
+	public Asset function dependents() {
 		this.before( argumentCollection=arguments );
 
 		var dp = getDependents();
@@ -44,7 +44,7 @@ component accessors=true output=false {
 		return this;
 	}
 
-	public Asset function dependsOn() output=false {
+	public Asset function dependsOn() {
 		this.after( argumentCollection=arguments );
 
 		var dp = getDependsOn();
@@ -55,7 +55,7 @@ component accessors=true output=false {
 		return this;
 	}
 
-	public struct function getMemento() output=false {
+	public struct function getMemento() {
 		return {
 			  type            = getType()
 			, url             = getUrl()

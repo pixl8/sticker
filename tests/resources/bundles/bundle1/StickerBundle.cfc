@@ -1,6 +1,6 @@
-component output=false {
+component {
 
-	public function configure( bundle, config ) output=false {
+	public function configure( bundle, config ) {
 		var skipAssets = arguments.config.skipAllAssets ?: "";
 
 		if ( IsBoolean( skipAssets ) && skipAssets ) {

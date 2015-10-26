@@ -58,9 +58,9 @@ The Sticker API is designed to be a Singleton and any instances you create shoul
 
 .. code-block:: js
 
-    component output=false {
+    component {
         //...
-        function onApplicationStart() output=false {
+        function onApplicationStart() {
 
             // 1. instantiate sticker with no arguments
             var sticker = new sticker.Sticker();
@@ -95,10 +95,10 @@ And a :code:`StickerBundle.cfc` file that looks like this:
 
 .. code-block:: js
 
-    component output=false {
+    component {
 
         // all valid StickerBundle.cfc files must implement the 'configure()' method
-        public void function configure( bundle ) output=false {
+        public void function configure( bundle ) {
             // registering a single, remote asset
             bundle.addAsset( id="jquery", url="http://cdn.jquery.com/jquery-34.25.34.min.js" );
 
@@ -156,9 +156,9 @@ Example:
 
 .. code-block:: js
 
-    component output=false {
+    component {
 
-        public void function configure( bundle ) output=false {
+        public void function configure( bundle ) {
            // etc...
 
            // the sitecore asset depends on jquery, all other assets depend on sitecore
@@ -186,9 +186,9 @@ Example:
 
 .. code-block:: js
 
-    component output=false {
+    component {
 
-        public void function configure( bundle ) output=false {
+        public void function configure( bundle ) {
            // etc...
 
            bundle.asset( "hacky-ie-js" ).setIE( "lte IE 7" );

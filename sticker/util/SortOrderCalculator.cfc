@@ -3,14 +3,14 @@
  * keys in the correct order
  */
 
-component output=false {
+component {
 
 	/**
 	 * I calculate the sort order of assets
 	 *
 	 * @assets.hint Assets structure
 	 */
-	public array function calculateOrder( required struct assets ) output=false {
+	public array function calculateOrder( required struct assets ) {
 		var assetKeys  = arguments.assets.keyArray();
 		var keyCount   = assetKeys.len();
 		var newOrder   = "";
@@ -49,7 +49,7 @@ component output=false {
 	}
 
 // private utility
-	private any function _isBefore( required string key1, required string key2, required struct assets ) output=false {
+	private any function _isBefore( required string key1, required string key2, required struct assets ) {
 		var key1Befores = arguments.assets[ arguments.key1 ].getBefore();
 		var key1Afters  = arguments.assets[ arguments.key1 ].getAfter();
 		var key2Befores = arguments.assets[ arguments.key2 ].getBefore();

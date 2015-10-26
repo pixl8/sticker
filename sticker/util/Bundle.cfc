@@ -3,7 +3,7 @@
  * for configuring myself
  *
  */
-component output=false {
+component {
 
 // CONSTRUCTOR
 	/**
@@ -11,7 +11,7 @@ component output=false {
 	 *
 	 * @rootUrl.hint The root URL of the bundle, all generated URLs for each asset in the bundle will be relative to this
 	 */
-	public Bundle function init( required string rootDirectory, required string rootUrl ) output=false {
+	public Bundle function init( required string rootDirectory, required string rootUrl ) {
 		_setRootDirectory( arguments.rootDirectory );
 		_setRootUrl( arguments.rootUrl );
 		_setAssetCollection( {} );
@@ -22,7 +22,7 @@ component output=false {
 	/**
 	 * I return a structure of all the asset definitions stored in the bundle
 	 */
-	public struct function getAssets() output=false {
+	public struct function getAssets() {
 		return _getAssetCollection();
 	}
 
@@ -41,7 +41,7 @@ component output=false {
 	    ,          string type
 	    ,          string ie    = ""
 	    ,          string media = ""
-	) output=false {
+	) {
 		var assetCollection = _getAssetCollection();
 		var asset = {};
 
@@ -78,7 +78,7 @@ component output=false {
 		  required string   directory
 		, required any      match
 		, required function idGenerator
-	) output=false {
+	) {
 		var rootDir   = ExpandPath( _getRootDirectory() );
 		var directory = rootDir;
 		var matches   = "";
@@ -107,7 +107,7 @@ component output=false {
 	}
 
 // PRIVATE HELPERS
-	private string function _resolvePath( required string path ) output=false {
+	private string function _resolvePath( required string path ) {
 		var fullPath  = _getRootDirectory();
 		var directory = "";
 		var file      = "";
@@ -142,7 +142,7 @@ component output=false {
 	 *
 	 * @id.hint ID of the asset to fetch
 	 */
-	public Asset function asset( required string id ) output=false {
+	public Asset function asset( required string id ) {
 		var assetCollection = _getAssetCollection();
 
 		if ( !assetCollection.keyExists( arguments.id ) ) {
@@ -153,24 +153,24 @@ component output=false {
 	}
 
 // GETTERS AND SETTERS
-	private string function _getRootDirectory() output=false {
+	private string function _getRootDirectory() {
 		return _rootDirectory;
 	}
-	private void function _setRootDirectory( required string rootDirectory ) output=false {
+	private void function _setRootDirectory( required string rootDirectory ) {
 		_rootDirectory = ReReplace( arguments.rootDirectory, "(.*?)/$", "\1" );
 	}
 
-	private string function _getRootUrl() output=false {
+	private string function _getRootUrl() {
 		return _rootUrl;
 	}
-	private void function _setRootUrl( required string rootUrl ) output=false {
+	private void function _setRootUrl( required string rootUrl ) {
 		_rootUrl = ReReplace( arguments.rootUrl, "(.*?)/$", "\1" );
 	}
 
-	private struct function _getAssetCollection() output=false {
+	private struct function _getAssetCollection() {
 		return _assetCollection;
 	}
-	private void function _setAssetCollection( required struct assetCollection ) output=false {
+	private void function _setAssetCollection( required struct assetCollection ) {
 		_assetCollection = arguments.assetCollection;
 	}
 }
