@@ -17,12 +17,19 @@ component {
 		  required string  href
 		,          string  media                = ""
 		,          boolean includeTrailingSlash = false
+		,          struct  extraAttributes      = {}
 	) {
 		var rendered = '<link rel="stylesheet" type="text/css" href="#arguments.href#"';
+		var extraAttributeNames = arguments.extraAttributes.keyArray().sort( "textnocase" );
 
 		if ( Len( Trim( arguments.media ) ) ) {
 			rendered &= ' media="#arguments.media#"';
 		}
+
+		for( var attributeName in extraAttributeNames ) {
+			rendered &= ' ' & LCase( attributeName ) & '="#HTMLEditFormat( arguments.extraAttributes[ attributeName ] )#"';
+		}
+
 		if ( arguments.includeTrailingSlash ) {
 			rendered &= " /";
 		}
@@ -35,8 +42,15 @@ component {
 	 *
 	 * @src.hint The URL of the javacript to include
 	 */
-	public string function renderJsInclude( required string src ) {
-		return '<script src="#arguments.src#"></script>';
+	public string function renderJsInclude( required string src, struct extraAttributes = {} ) {
+		var rendered            = '<script src="#arguments.src#"';
+		var extraAttributeNames = arguments.extraAttributes.keyArray().sort( "textnocase" );
+
+		for( var attributeName in extraAttributeNames ) {
+			rendered &= ' ' & LCase( attributeName ) & '="#HTMLEditFormat( arguments.extraAttributes[ attributeName ] )#"';
+		}
+
+		return rendered & '></script>';
 	}
 
 	/**
@@ -69,7 +83,7 @@ component {
 	public struct function addRenderedIncludesToAssets( required struct assets ) {
 		for ( var assetId in arguments.assets ) {
 			var asset    = arguments.assets[ assetId ];
-			var rendered = asset.getType() == "js" ? renderJsInclude( asset.getUrl() ) : renderCssInclude( href=asset.getUrl(), media=asset.getMedia() );
+			var rendered = asset.getType() == "js" ? renderJsInclude( asset.getUrl(), asset.getExtraAttributes() ) : renderCssInclude( href=asset.getUrl(), media=asset.getMedia(), extraAttributes=asset.getExtraAttributes() );
 
 			if ( Len( Trim( asset.getIe() ) ) ) {
 				rendered = wrapWithIeConditional( rendered, asset.getIe() );

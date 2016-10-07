@@ -107,7 +107,7 @@ component extends="testbox.system.BaseSpec"{
 				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/subfolder/more.min.css">' & Chr(13) & Chr(10) &
 				'<script src="http://bundle1.com/assets/js/subfolder/fa56e8c-myfile.min.js"></script>' & Chr(13) & Chr(10) &
 				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://jquery.com/jquery.js"></script>' & Chr(13) & Chr(10)
+				'<script src="http://jquery.com/jquery.js" crossorigin="anonymous" integrity="sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC"></script>' & Chr(13) & Chr(10)
 			);
 		} );
 
@@ -152,7 +152,7 @@ component extends="testbox.system.BaseSpec"{
 			expect( sticker.renderIncludes( type="js" ) ).toBe(
 				'<script src="http://bundle1.com/assets/js/subfolder/fa56e8c-myfile.min.js"></script>' & Chr(13) & Chr(10) &
 				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://jquery.com/jquery.js"></script>' & Chr(13) & Chr(10)
+				'<script src="http://jquery.com/jquery.js" crossorigin="anonymous" integrity="sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC"></script>' & Chr(13) & Chr(10)
 			);
 		} );
 
@@ -189,7 +189,7 @@ component extends="testbox.system.BaseSpec"{
 				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/some.min.css">' & Chr(13) & Chr(10) &
 				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/subfolder/more.min.css">' & Chr(13) & Chr(10) &
 				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://jquery.com/jquery.js"></script>' & Chr(13) & Chr(10)
+				'<script src="http://jquery.com/jquery.js" crossorigin="anonymous" integrity="sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC"></script>' & Chr(13) & Chr(10)
 			);
 		} );
 
@@ -206,7 +206,7 @@ component extends="testbox.system.BaseSpec"{
 
 			expect( sticker.renderIncludes( group="top" ) ).toBe(
 				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://jquery.com/jquery.js"></script>' & Chr(13) & Chr(10)
+				'<script src="http://jquery.com/jquery.js" crossorigin="anonymous" integrity="sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC"></script>' & Chr(13) & Chr(10)
 			);
 		} );
 
