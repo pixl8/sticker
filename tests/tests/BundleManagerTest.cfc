@@ -49,6 +49,7 @@ component extends="testbox.system.BaseSpec"{
 						, renderedInclude = ""
 						, dependsOn       = []
 						, dependents      = ["jquery"]
+						, extraAttributes = {}
 					},
 					"css-subfolder-another"={
 						  before          = []
@@ -61,6 +62,7 @@ component extends="testbox.system.BaseSpec"{
 						, renderedInclude = ""
 						, dependsOn       = []
 						, dependents      = []
+						, extraAttributes = {}
 					},
 					"js-subfolder-myfile"={
 						  before          = ["jquery", "js-someplugin"]
@@ -73,6 +75,7 @@ component extends="testbox.system.BaseSpec"{
 						, renderedInclude = ""
 						, dependsOn       = []
 						, dependents      = []
+						, extraAttributes = {}
 					},
 					"css-subfolder-more"={
 						  before          = ["subfolder-another"]
@@ -85,6 +88,7 @@ component extends="testbox.system.BaseSpec"{
 						, renderedInclude = ""
 						, dependsOn       = ["css-some"]
 						, dependents      = []
+						, extraAttributes = {}
 					},
 					"jquery"={
 						  before          = []
@@ -97,6 +101,7 @@ component extends="testbox.system.BaseSpec"{
 						, renderedInclude = ""
 						, dependsOn       = ["js-someplugin"]
 						, dependents      = []
+						, extraAttributes = { integrity="sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC", crossorigin="anonymous" }
 					},
 					"jquery-ui-css"={
 						  before          = ["css-some", "css-subfolder-another", "css-subfolder-more"]
@@ -109,6 +114,7 @@ component extends="testbox.system.BaseSpec"{
 						, renderedInclude = ""
 						, dependsOn       = []
 						, dependents      = []
+						, extraAttributes = {}
 					},
 					"css-some"={
 						  before          = ["css-subfolder-another", "css-subfolder-more"]
@@ -121,6 +127,7 @@ component extends="testbox.system.BaseSpec"{
 						, renderedInclude = ""
 						, dependsOn       = ["jquery-ui-css"]
 						, dependents      = []
+						, extraAttributes = {}
 					}
 				} );
 			} );

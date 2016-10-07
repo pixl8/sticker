@@ -1,5 +1,6 @@
 /**
  * I am an Asset bean, I represent a single asset in a bundle
+ *
  */
 component accessors=true {
 
@@ -11,6 +12,7 @@ component accessors=true {
 	property name="after"           type="array";
 	property name="dependsOn"       type="array";
 	property name="dependents"      type="array";
+	property name="extraAttributes" type="struct";
 	property name="renderedInclude" type="string" default="";
 	property name="ie"              type="string" default="";
 	property name="media"           type="string" default="";
@@ -67,6 +69,7 @@ component accessors=true {
 			, renderedInclude = getRenderedInclude()
 			, ie              = getIe()
 			, media           = getMedia()
+			, extraAttributes = getExtraAttributes()
 		};
 	}
 
