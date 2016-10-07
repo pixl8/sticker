@@ -37,6 +37,8 @@ component {
 	public Bundle function addAsset(
 		  required string id
 	    ,          string url
+	    ,          string integrity   = ""
+	    ,          string crossorigin = ""
 	    ,          string path
 	    ,          string type
 	    ,          string ie    = ""
@@ -47,9 +49,11 @@ component {
 
 		if ( StructKeyExists( arguments, "path" ) ) {
 			asset.path = _resolvePath( arguments.path );
-			asset.url = _getRootUrl() & asset.path;
+			asset.url  = _getRootUrl() & asset.path;
 		} else if ( StructKeyExists( arguments, "url" ) ) {
-			asset.url = arguments.url
+			asset.url         = arguments.url;
+			asset.integrity   = arguments.integrity;
+			asset.crossorigin = arguments.crossorigin;
 		}
 
 		asset.type         = arguments.type ?: ListLast( asset.url, "." );

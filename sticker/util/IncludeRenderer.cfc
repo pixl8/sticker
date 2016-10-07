@@ -16,12 +16,21 @@ component {
 	public string function renderCssInclude(
 		  required string  href
 		,          string  media                = ""
+		,          string  integrity            = ""
+		,          string  crossorigin          = ""
 		,          boolean includeTrailingSlash = false
 	) {
+
 		var rendered = '<link rel="stylesheet" type="text/css" href="#arguments.href#"';
 
-		if ( Len( Trim( arguments.media ) ) ) {
+		if ( !isEmpty( arguments.media ) ) {
 			rendered &= ' media="#arguments.media#"';
+		}
+		if ( !isEmpty( arguments.integrity ) ) {
+			rendered &= ' integrity="#arguments.integrity#"';
+		}
+		if ( !isEmpty( arguments.crossorigin ) ) {
+			rendered &= ' crossorigin="#arguments.crossorigin#"';
 		}
 		if ( arguments.includeTrailingSlash ) {
 			rendered &= " /";
@@ -35,8 +44,21 @@ component {
 	 *
 	 * @src.hint The URL of the javacript to include
 	 */
-	public string function renderJsInclude( required string src ) {
-		return '<script src="#arguments.src#"></script>';
+	public string function renderJsInclude(
+		  required string src
+		,          string integrity   = ""
+		,          string crossorigin = ""
+	) {
+		var rendered = '<script src="#arguments.src#" ';
+
+		if ( !isEmpty( arguments.integrity ) ) {
+			rendered &= ' integrity="#arguments.integrity#"';
+		}
+		if ( !isEmpty( arguments.crossorigin ) ) {
+			rendered &= ' crossorigin="#arguments.crossorigin#"';
+		}
+
+		return rendered & "></script>";
 	}
 
 	/**
@@ -69,7 +91,7 @@ component {
 	public struct function addRenderedIncludesToAssets( required struct assets ) {
 		for ( var assetId in arguments.assets ) {
 			var asset    = arguments.assets[ assetId ];
-			var rendered = asset.getType() == "js" ? renderJsInclude( asset.getUrl() ) : renderCssInclude( href=asset.getUrl(), media=asset.getMedia() );
+			var rendered = asset.getType() == "js" ? renderJsInclude( src=asset.getUrl(), integrity= asset.getIntegrity(), crossorigin= asset.getCrossOrigin() ) : renderCssInclude( href=asset.getUrl(), media=asset.getMedia(), integrity= asset.getIntegrity(), crossorigin= asset.getCrossOrigin() );
 
 			if ( Len( Trim( asset.getIe() ) ) ) {
 				rendered = wrapWithIeConditional( rendered, asset.getIe() );
