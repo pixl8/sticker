@@ -8,8 +8,10 @@ component {
 		}
 
 		bundle.addAsset(
-			  id   = "jquery"
-			, url  = "http://jquery.com/jquery.js"
+			  id          = "jquery"
+			, url         = "http://jquery.com/jquery.js"
+			, integrity   = "sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC"
+			, crossorigin = "anonymous"
 		);
 
 		bundle.addAssets(

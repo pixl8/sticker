@@ -43,7 +43,9 @@ component {
 	    ,          string media = ""
 	) {
 		var assetCollection = _getAssetCollection();
-		var asset = {};
+		var asset           = {};
+		var extraAttributes = {};
+		var expectedArgs    = [ "id", "url", "path", "type", "ie", "media" ];
 
 		if ( StructKeyExists( arguments, "path" ) ) {
 			asset.path = _resolvePath( arguments.path );
@@ -52,13 +54,21 @@ component {
 			asset.url = arguments.url
 		}
 
-		asset.type         = arguments.type ?: ListLast( asset.url, "." );
-		asset.before       = [];
-		asset.after        = [];
-		asset.dependsOn    = [];
-		asset.dependents   = [];
-		asset.ie           = arguments.ie;
-		asset.media        = arguments.media;
+		for( var argName in arguments ) {
+			if ( !expectedArgs.findNoCase( argName ) && IsSimpleValue( arguments[ argName ] ) ) {
+				extraAttributes[ argName ] = arguments[ argName ];
+			}
+		}
+
+		asset.type            = arguments.type ?: ListLast( asset.url, "." );
+		asset.before          = [];
+		asset.after           = [];
+		asset.dependsOn       = [];
+		asset.dependents      = [];
+		asset.ie              = arguments.ie;
+		asset.media           = arguments.media;
+		asset.extraAttributes = extraAttributes;
+
 
 		assetCollection[ arguments.id ] = new Asset( argumentCollection=asset );
 
