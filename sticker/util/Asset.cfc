@@ -5,7 +5,8 @@ component accessors=true {
 
 	property name="type"            type="string";
 	property name="url"             type="string";
-	property name="path"            type="string" default="";
+	property name="integrity"       type="string" default="";
+	property name="crossorigin"     type="string" default="";
 	property name="path"            type="string" default="";
 	property name="before"          type="array";
 	property name="after"           type="array";
@@ -59,6 +60,8 @@ component accessors=true {
 		return {
 			  type            = getType()
 			, url             = getUrl()
+			, integrity       = getIntegrity()
+			, crossorigin     = getCrossOrigin()
 			, path            = getPath()
 			, before          = getBefore()
 			, after           = getAfter()
