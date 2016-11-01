@@ -35,7 +35,7 @@ component {
 							orderChanged = true;
 							newOrder.deleteAt( pos1 );
 							newOrder.insertAt( pos2, key1 );
-						} elseif ( !key1ShouldBeBeforeKey2 && pos2 > pos1 ) {
+						} else if ( !key1ShouldBeBeforeKey2 && pos2 > pos1 ) {
 							orderChanged = true;
 							newOrder.deleteAt( pos2 );
 							newOrder.insertAt( pos1, key2 );
@@ -50,15 +50,18 @@ component {
 
 // private utility
 	private any function _isBefore( required string key1, required string key2, required struct assets ) {
-		var key1Befores = arguments.assets[ arguments.key1 ].getBefore();
-		var key1Afters  = arguments.assets[ arguments.key1 ].getAfter();
-		var key2Befores = arguments.assets[ arguments.key2 ].getBefore();
-		var key2Afters  = arguments.assets[ arguments.key2 ].getAfter();
-
+		var key1Befores = arguments.assets[ arguments.key1 ].getBeforeAssert();
+		var key1Afters  = arguments.assets[ arguments.key1 ].getAfterAssert();
+		var key2Befores = arguments.assets[ arguments.key2 ].getBeforeAssert();
+		var key2Afters  = arguments.assets[ arguments.key2 ].getAfterAssert();
+try{
 		if ( !key1Befores.findNoCase( arguments.key2 ) && !key1Afters.findNoCase( arguments.key2 ) && !key2Befores.findNoCase( arguments.key1 ) && !key2Afters.findNoCase( arguments.key1) ) {
 			return; // return null - no positive evidence to suggest it is before - leave order as it is
 		}
-
+}catch( any e ){
+	writeDump(arguments.key1);
+	writeDump(arguments.assets);abort;
+}
 		return     ( key1Befores.findNoCase( arguments.key2 ) || key2Afters.findNoCase( arguments.key1 ) )
 		       && !( key2Befores.findNoCase( arguments.key1 ) || key1Afters.findNoCase( arguments.key2 ) );
 	}

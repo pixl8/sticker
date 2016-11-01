@@ -51,7 +51,8 @@ component {
 			asset.path = _resolvePath( arguments.path );
 			asset.url = _getRootUrl() & asset.path;
 		} else if ( StructKeyExists( arguments, "url" ) ) {
-			asset.url = arguments.url
+			asset.path = "";
+			asset.url = arguments.url;
 		}
 
 		for( var argName in arguments ) {
@@ -60,17 +61,17 @@ component {
 			}
 		}
 
-		asset.type            = arguments.type ?: ListLast( asset.url, "." );
-		asset.before          = [];
-		asset.after           = [];
-		asset.dependsOn       = [];
-		asset.dependents      = [];
-		asset.ie              = arguments.ie;
-		asset.media           = arguments.media;
-		asset.extraAttributes = extraAttributes;
-
-
-		assetCollection[ arguments.id ] = new Asset( argumentCollection=asset );
+		assetCollection[ arguments.id ] = new Asset(
+			  type             = arguments.type ?: ListLast( asset.url, "." )
+			, url              = asset.url
+			, path             = asset.path
+			, beforeAssert     = []
+			, afterAssert      = []
+			, dependsOnAssert  = []
+			, dependentsAssert = []
+			, ie               = arguments.ie
+			, media            = arguments.media
+			, extraAttributes  = extraAttributes );
 
 		return this;
 	}
@@ -90,17 +91,17 @@ component {
 		, required function idGenerator
 	) {
 		var rootDir   = ExpandPath( _getRootDirectory() );
-		var directory = rootDir;
+		var _directory = rootDir;
 		var matches   = "";
 
 		if ( Left( arguments.directory, 1 ) != "/" ) {
-			directory &= "/";
+			_directory &= "/";
 		}
-		directory &= arguments.directory;
+		_directory &= arguments.directory;
 
-		if ( DirectoryExists( directory ) ) {
+		if ( DirectoryExists( _directory ) ) {
 			var filter = IsSimpleValue( arguments.match ) ? arguments.match : "*";
-			matches = DirectoryList( directory, true, "path", filter );
+			matches = DirectoryList( _directory, true, "path", filter );
 			for( var path in matches ){
 				var relativePath = Replace( Replace( path, rootDir, "" ), "\", "/", "all" );
 
@@ -129,7 +130,7 @@ component {
 		}
 		fullPath &= arguments.path;
 
-		directory = GetDirectoryFromPath( fullPath );
+		directory = ExpandPath( GetDirectoryFromPath( fullPath ) );
 		file      = ListLast( fullPath, "\/" );
 
 		if ( !DirectoryExists( directory ) ) {

@@ -176,16 +176,16 @@ component {
 		}
 	}
 
-	private struct function _getRequestStorage( string key="includes" ) {
-		var key = _getRequestKey();
-		if ( !request.keyExists( key ) ) {
-			request[ key ] = {
+	private struct function _getRequestStorage( string key="includes" ) output=false {
+		var _key = _getRequestKey();
+		if ( !request.keyExists( _key ) ) {
+			request[ _key ] = {
 				  includes = {}
 				, data     = StructNew( "linked" )
 			};
 		}
 
-		return request[ key ][ arguments.key ];
+		return request[ _key ][ arguments.key ];
 	}
 
 	private void function _addIncludeDependencies( required struct includes ) {
@@ -199,7 +199,7 @@ component {
 	private array function _getDependencies( required string assetId, required array ignore, array dependencies=[] ) {
 		var assets = _getAssets();
 
-		for( var dependencyAssetId in assets[ arguments.assetId ].getDependsOn() ) {
+		for( var dependencyAssetId in assets[ arguments.assetId ].getDependsOnAssert() ) {
 			if ( !ignore.find( dependencyAssetId ) && !arguments.dependencies.find( dependencyAssetId ) ) {
 				arguments.dependencies.append( dependencyAssetId );
 				arguments.dependencies = _getDependencies( dependencyAssetId, arguments.ignore, arguments.dependencies );

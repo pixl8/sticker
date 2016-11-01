@@ -20,7 +20,9 @@ component {
 		,          struct  extraAttributes      = {}
 	) {
 		var rendered = '<link rel="stylesheet" type="text/css" href="#arguments.href#"';
-		var extraAttributeNames = arguments.extraAttributes.keyArray().sort( "textnocase" );
+		var extraAttributeNames = arguments.extraAttributes;
+		var extraAttributeNames = structKeyArray( extraAttributeNames );
+		arraySort( extraAttributeNames, "textnocase" );
 
 		if ( Len( Trim( arguments.media ) ) ) {
 			rendered &= ' media="#arguments.media#"';
@@ -44,7 +46,9 @@ component {
 	 */
 	public string function renderJsInclude( required string src, struct extraAttributes = {} ) {
 		var rendered            = '<script src="#arguments.src#"';
-		var extraAttributeNames = arguments.extraAttributes.keyArray().sort( "textnocase" );
+		var extraAttributesName = arguments.extraAttributes;
+		var extraAttributeNames = structKeyArray( extraAttributesName );
+		arraySort( extraAttributeNames, "textnocase" );
 
 		for( var attributeName in extraAttributeNames ) {
 			rendered &= ' ' & LCase( attributeName ) & '="#HTMLEditFormat( arguments.extraAttributes[ attributeName ] )#"';
