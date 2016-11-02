@@ -1,8 +1,8 @@
 component {
 
 	public function configure( bundle, config ) {
-		var skipAssets = arguments.config.skipAllAssets ?: "";
-
+		var assertConfig = arguments.config;
+		var skipAssets = assertConfig.skipAllAssets ?: "";
 		if ( IsBoolean( skipAssets ) && skipAssets ) {
 			return;
 		}

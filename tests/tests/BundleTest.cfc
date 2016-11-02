@@ -92,7 +92,7 @@ component extends="testbox.system.BaseSpec"{
 					, match       = "*.min.css"
 					, idGenerator = function( path ){
 						var fileName = ListLast( path, "/" );
-						return LCase( ReReplaceNoCase( fileName, "^(.*?)\.min\.css", "\1" ) )
+						return LCase( ReReplaceNoCase( fileName, "^(.*?)\.min\.css", "\1" ) );
 					  }
 				);
 
@@ -111,7 +111,7 @@ component extends="testbox.system.BaseSpec"{
 					, match       = function( path ){ return ReFindNoCase( ".*?\.min\.css$", arguments.path ); }
 					, idGenerator = function( path ){
 						var fileName = ListLast( path, "/" );
-						return LCase( ReReplaceNoCase( fileName, "^(.*?)\.min\.css", "\1" ) )
+						return LCase( ReReplaceNoCase( fileName, "^(.*?)\.min\.css", "\1" ) );
 					  }
 				);
 

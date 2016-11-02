@@ -49,25 +49,25 @@ component extends="testbox.system.BaseSpec"{
 		describe( "renderJsData()", function(){
 
 			it( "should return a script block with passed data rendered as a JavaScript object", function(){
-				var testData = StructNew( "linked" );
+				var testData = createObject("java", "java.util.LinkedHashMap").init();
 
 				testData[ "thisIsAnArray"  ] = [ 1,2,3,4,"five"];
 				testData[ "thisIsAnObject" ] = { "thisIsAKey"="and a value", "aontherKey"=[1,4,{},false]};
-				testData[ "interesting"    ] = NullValue();
+				testData[ "interesting"    ] = javaCast( "null", "" );
 
-				var expectedResult = '<script>cfrequest={"thisIsAnArray":[1,2,3,4,"five"],"thisIsAnObject":{"thisIsAKey":"and a value","aontherKey":[1,4,{},false]},"interesting":null}</script>'
+				var expectedResult = '<script>cfrequest={"thisIsAnArray":[1,2,3,4,"five"],"thisIsAnObject":{"thisIsAKey":"and a value","aontherKey":[1,4,{},false]},"interesting":null}</script>';
 
 				expect( renderer.renderData( data=testData ) ).toBe( expectedResult );
 			} );
 
 			it( "should use custom variable name when passed, rather than the default 'cfrequest'", function(){
-				var testData = StructNew( "linked" );
+				var testData = createObject("java", "java.util.LinkedHashMap").init();
 
 				testData[ "thisIsAnArray"  ] = [ 1,2,3,4,"five"];
 				testData[ "thisIsAnObject" ] = { "thisIsAKey"="and a value", "aontherKey"=[1,4,{},false]};
-				testData[ "interesting"    ] = NullValue();
+				testData[ "interesting"    ] = javaCast( "null", "" );
 
-				var expectedResult = '<script>customVariableName={"thisIsAnArray":[1,2,3,4,"five"],"thisIsAnObject":{"thisIsAKey":"and a value","aontherKey":[1,4,{},false]},"interesting":null}</script>'
+				var expectedResult = '<script>customVariableName={"thisIsAnArray":[1,2,3,4,"five"],"thisIsAnObject":{"thisIsAKey":"and a value","aontherKey":[1,4,{},false]},"interesting":null}</script>';
 				expect( renderer.renderData( data=testData, variableName="customVariableName" ) ).toBe( expectedResult );
 
 			} );
@@ -93,12 +93,12 @@ component extends="testbox.system.BaseSpec"{
 
 			it( "should render an include for each asset in the passed assets structure", function(){
 				var assets = {
-					  key1 = new sticker.util.Asset( before=[], after=[], url="/some/url/to.js"           , type="js"                , extraAttributes={} )
-					, key2 = new sticker.util.Asset( before=[], after=[], url="/some/url/toanother.js"    , type="js"                , extraAttributes={ test="true" } )
-					, key3 = new sticker.util.Asset( before=[], after=[], url="/some/url/toyetanother.js" , type="js", ie="!IE"      , extraAttributes={} )
-					, key4 = new sticker.util.Asset( before=[], after=[], url="/some/url/to.css"          , type="css"               , extraAttributes={ nice="try" } )
-					, key5 = new sticker.util.Asset( before=[], after=[], url="/some/url/toanother.css"   , type="css", media="print", extraAttributes={} )
-					, key6 = new sticker.util.Asset( before=[], after=[], url="/some/url/toyetanother.css", type="css", ie="IE 8"    , extraAttributes={} )
+					  key1 = new sticker.util.Asset( beforeAssert=[], afterAssert=[], url="/some/url/to.js"           , type="js"                , extraAttributes={}, dependsOnAssert=[], dependentsAssert=[] )
+					, key2 = new sticker.util.Asset( beforeAssert=[], afterAssert=[], url="/some/url/toanother.js"    , type="js"                , extraAttributes={ test="true" }, dependsOnAssert=[], dependentsAssert=[] )
+					, key3 = new sticker.util.Asset( beforeAssert=[], afterAssert=[], url="/some/url/toyetanother.js" , type="js", ie="!IE"      , extraAttributes={}, dependsOnAssert=[], dependentsAssert=[] )
+					, key4 = new sticker.util.Asset( beforeAssert=[], afterAssert=[], url="/some/url/to.css"          , type="css"               , extraAttributes={ nice="try" }, dependsOnAssert=[], dependentsAssert=[] )
+					, key5 = new sticker.util.Asset( beforeAssert=[], afterAssert=[], url="/some/url/toanother.css"   , type="css", media="print", extraAttributes={}, dependsOnAssert=[], dependentsAssert=[] )
+					, key6 = new sticker.util.Asset( beforeAssert=[], afterAssert=[], url="/some/url/toyetanother.css", type="css", ie="IE 8"    , extraAttributes={}, dependsOnAssert=[], dependentsAssert=[] )
 				};
 				var actual   = _assetsToStruct( renderer.addRenderedIncludesToAssets( assets=assets ) );
 				var expected = duplicate( _assetsToStruct( assets ) );
