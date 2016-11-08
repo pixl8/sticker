@@ -72,7 +72,7 @@ component {
 
 		var assets = _getAssets();
 
-		if ( assets.keyExists( arguments.assetId ) ) {
+		if ( structKeyExists( assets, arguments.assetId ) ) {
 			return assets[ arguments.assetId ].getUrl();
 		}
 
@@ -94,8 +94,8 @@ component {
 		if ( assets.keyExists( arguments.assetId ) ) {
 			var requestedIncludes = _getRequestStorage();
 
-			if ( !requestedIncludes.keyExists( arguments.group ) ){
-				requestedIncludes[ arguments.group ] = StructNew( "linked" );
+			if ( !structKeyExists( requestedIncludes, arguments.group ) ){
+				requestedIncludes[ arguments.group ] = StructNew( "ordered" );
 			}
 
 			requestedIncludes[ arguments.group ][ arguments.assetId ] = "";
@@ -119,11 +119,11 @@ component {
 		_checkReady();
 
 		var requestStorage = _getRequestStorage( "data" );
-		if ( !requestStorage.keyExists( arguments.group ) ){
-			requestStorage[ arguments.group ] = StructNew( "linked" );
+		if ( !structKeyExists( requestStorage,arguments.group ) ){
+			requestStorage[ arguments.group ] = StructNew( "ordered" );
 		}
 
-		requestStorage[ arguments.group ].append( arguments.data );
+		structAppend( requestStorage[ arguments.group ], arguments.data );
 
 		return this;
 	}
@@ -139,23 +139,24 @@ component {
 		var ordered       = [];
 		var assets        = _getAssets();
 		var rendered      = "";
-
-		includes = ( includes[ arguments.group ] ?: {} );
+		var groups        =  arguments.group;
+		includes = ( includes[ groups ] ?: {} );
 
 		_addIncludeDependencies( includes );
 
 		for( var assetid in fullSortOrder ){
-			if ( includes.keyExists( assetId ) ) {
+			if ( structKeyExists( includes, assetId ) ) {
 				ordered.append( assetId );
 			}
 		}
 
 		for( var t in [ "css", "js" ] ){
-			if ( t == ( arguments.type ?: t ) ) {
+			var _type = structKeyExists( arguments, "type" ) && len( arguments.type ) ? arguments.type : t;
+			if ( t == _type ) {
 				if ( t == "js" ) {
 					var data = _getRequestStorage( "data" );
-					if ( data.keyExists( arguments.group ) ) {
-						rendered &= new util.IncludeRenderer().renderData( data[ arguments.group ] ) & Chr(13) & Chr(10);
+					if ( structKeyExists( data, groups ) ) {
+						rendered &= new util.IncludeRenderer().renderData( data[ groups ] ) & Chr(13) & Chr(10);
 					}
 				}
 				for( var asset in ordered ){
@@ -176,21 +177,22 @@ component {
 		}
 	}
 
-	private struct function _getRequestStorage( string key="includes" ) {
-		var key = _getRequestKey();
-		if ( !request.keyExists( key ) ) {
-			request[ key ] = {
-				  includes = {}
-				, data     = StructNew( "linked" )
+	private struct function _getRequestStorage( string key="includes" ) output=false {
+		var _key = _getRequestKey();
+		if ( !request.keyExists( _key ) ) {
+			request[ _key ] = {
+				  includes = structNew()
+				, data     = StructNew( "ordered" )
 			};
 		}
 
-		return request[ key ][ arguments.key ];
+		return request[ _key ][ arguments.key ];
 	}
 
 	private void function _addIncludeDependencies( required struct includes ) {
-		for( var assetId in arguments.includes ){
-			for( var dependencyAssetId in _getDependencies( assetId=assetId, ignore=arguments.includes.keyArray() ) ){
+		var args = duplicate(arguments);
+		for( var assetId in args.includes ){
+			for( var dependencyAssetId in _getDependencies( assetId=assetId, ignore=structKeyArray( args.includes ) ) ){
 				arguments.includes[ dependencyAssetId ] = "";
 			}
 		}
@@ -199,7 +201,7 @@ component {
 	private array function _getDependencies( required string assetId, required array ignore, array dependencies=[] ) {
 		var assets = _getAssets();
 
-		for( var dependencyAssetId in assets[ arguments.assetId ].getDependsOn() ) {
+		for( var dependencyAssetId in assets[ arguments.assetId ].getDependsOnAssert() ) {
 			if ( !ignore.find( dependencyAssetId ) && !arguments.dependencies.find( dependencyAssetId ) ) {
 				arguments.dependencies.append( dependencyAssetId );
 				arguments.dependencies = _getDependencies( dependencyAssetId, arguments.ignore, arguments.dependencies );

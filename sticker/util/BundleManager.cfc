@@ -25,14 +25,15 @@ component {
 	 */
 	public BundleManager function addBundle( required string rootDirectory, required string rootUrl, string rootComponentPath, struct config={} ) {
 		var bundles       = _getBundles();
-		var bundle        = new Bundle( rootDirectory=arguments.rootDirectory, rootUrl=arguments.rootUrl );
-		var configCfcPath = arguments.rootComponentPath ?: _convertDirectoryToComponentPath( arguments.rootDirectory );
+		var _rootDirectory = arguments.rootDirectory;
+		var bundle        = new Bundle( rootDirectory=_rootDirectory, rootUrl=arguments.rootUrl );
+		var configCfcPath = arguments.rootComponentPath ?: _convertDirectoryToComponentPath( _rootDirectory );
 
 
 		configCfcPath &= ".StickerBundle";
 
-		if ( !FileExists( ListAppend( arguments.rootDirectory, "StickerBundle.cfc", "/" ) ) ) {
-			throw( type="Sticker.missingStickerBundle", message="No StickerBundle.cfc file found at [#arguments.rootDirectory#]" );
+		if ( !FileExists( ListAppend( expandPath( _rootDirectory ), "StickerBundle.cfc", "/" ) ) ) {
+			throw( type="Sticker.missingStickerBundle", message="No StickerBundle.cfc file found at [#_rootDirectory#]" );
 		}
 
 		CreateObject( configCfcPath ).configure( bundle, arguments.config );
@@ -100,7 +101,7 @@ component {
 	private void function _mapDependencies( required struct assets ) {
 		for( var assetId in arguments.assets ){
 			var asset = arguments.assets[ assetId ];
-			for( var dependentAssetId in asset.getDependents() ){
+			for( var dependentAssetId in asset.getDependentsAssert() ){
 				if ( arguments.assets.keyExists( dependentAssetId ) ) {
 					var dependentAsset = arguments.assets[ dependentAssetId ];
 
@@ -148,21 +149,22 @@ component {
 
 
 	private array function _getBeforeAfterOrDependencies( required string type, required Asset asset ) {
+		var argsAssert = arguments.asset;
 		switch( arguments.type ){
-			case "before"     : return arguments.asset.getBefore();
-			case "after"      : return arguments.asset.getAfter();
-			case "dependsOn"  : return arguments.asset.getDependsOn();
-			case "dependents" : return arguments.asset.getDependents();
+			case "before"     : return argsAssert.getBeforeAssert() ?: arrayNew(1);
+			case "after"      : return argsAssert.getAfterAssert() ?: arrayNew(1);
+			case "dependsOn"  : return argsAssert.getDependsOnAssert() ?: arrayNew(1);
+			case "dependents" : return argsAssert.getDependentsAssert() ?: arrayNew(1);
 		}
 	}
 
 
 	private void function _setBeforeAfterOrDependencies( required string type, required Asset asset, required array value ) {
 		switch( arguments.type ){
-			case "before"     : arguments.asset.setBefore( arguments.value ); break;
-			case "after"      : arguments.asset.setAfter( arguments.value ); break;
-			case "dependsOn"  : arguments.asset.setDependsOn( arguments.value ); break;
-			case "dependents" : arguments.asset.setDependents( arguments.value ); break;
+			case "before"     : arguments.asset.setBeforeAssert( arguments.value ); break;
+			case "after"      : arguments.asset.setAfterAssert( arguments.value ); break;
+			case "dependsOn"  : arguments.asset.setDependsOnAssert( arguments.value ); break;
+			case "dependents" : arguments.asset.setDependentsAssert( arguments.value ); break;
 		}
 	}
 
