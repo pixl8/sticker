@@ -87,7 +87,7 @@ component {
 	public struct function addRenderedIncludesToAssets( required struct assets ) {
 		for ( var assetId in arguments.assets ) {
 			var asset    = arguments.assets[ assetId ];
-			var rendered = asset.getType() == "js" ? renderJsInclude( asset.getUrl(), asset.getExtraAttributes() ) : renderCssInclude( href=asset.getUrl(), media=asset.getMedia(), extraAttributes=asset.getExtraAttributes() );
+			var rendered = asset.getType() == "js" ? renderJsInclude( asset.getUrl(), asset.getExtraAttributes() ) : renderCssInclude( href=asset.getUrl(), media=asset.getMedia(), includeTrailingSlash=false, extraAttributes=asset.getExtraAttributes() );
 
 			if ( Len( Trim( asset.getIe() ) ) ) {
 				rendered = wrapWithIeConditional( rendered, asset.getIe() );

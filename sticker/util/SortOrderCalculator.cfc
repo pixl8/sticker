@@ -54,14 +54,11 @@ component {
 		var key1Afters  = arguments.assets[ arguments.key1 ].getAfterAssert();
 		var key2Befores = arguments.assets[ arguments.key2 ].getBeforeAssert();
 		var key2Afters  = arguments.assets[ arguments.key2 ].getAfterAssert();
-try{
+
 		if ( !key1Befores.findNoCase( arguments.key2 ) && !key1Afters.findNoCase( arguments.key2 ) && !key2Befores.findNoCase( arguments.key1 ) && !key2Afters.findNoCase( arguments.key1) ) {
 			return; // return null - no positive evidence to suggest it is before - leave order as it is
 		}
-}catch( any e ){
-	writeDump(arguments.key1);
-	writeDump(arguments.assets);abort;
-}
+
 		return     ( key1Befores.findNoCase( arguments.key2 ) || key2Afters.findNoCase( arguments.key1 ) )
 		       && !( key2Befores.findNoCase( arguments.key1 ) || key1Afters.findNoCase( arguments.key2 ) );
 	}

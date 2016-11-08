@@ -25,14 +25,15 @@ component {
 	 */
 	public BundleManager function addBundle( required string rootDirectory, required string rootUrl, string rootComponentPath, struct config={} ) {
 		var bundles       = _getBundles();
-		var bundle        = new Bundle( rootDirectory=arguments.rootDirectory, rootUrl=arguments.rootUrl );
-		var rootDir       = arguments.rootDirectory;
-		var configCfcPath = arguments.rootComponentPath ?: _convertDirectoryToComponentPath( rootDir );
+		var _rootDirectory = arguments.rootDirectory;
+		var bundle        = new Bundle( rootDirectory=_rootDirectory, rootUrl=arguments.rootUrl );
+		var configCfcPath = arguments.rootComponentPath ?: _convertDirectoryToComponentPath( _rootDirectory );
 
 
 		configCfcPath &= ".StickerBundle";
-		if ( !FileExists( expandPath( ListAppend( arguments.rootDirectory, "StickerBundle.cfc", "/" ) ) ) ) {
-			throw( type="Sticker.missingStickerBundle", message="No StickerBundle.cfc file found at [#arguments.rootDirectory#]" );
+
+		if ( !FileExists( ListAppend( expandPath( _rootDirectory ), "StickerBundle.cfc", "/" ) ) ) {
+			throw( type="Sticker.missingStickerBundle", message="No StickerBundle.cfc file found at [#_rootDirectory#]" );
 		}
 
 		CreateObject( configCfcPath ).configure( bundle, arguments.config );
@@ -148,11 +149,12 @@ component {
 
 
 	private array function _getBeforeAfterOrDependencies( required string type, required Asset asset ) {
+		var argsAssert = arguments.asset;
 		switch( arguments.type ){
-			case "before"     : return isArray( arguments.asset.getBeforeAssert() )     ? arguments.asset.getBeforeAssert()     : arrayNew(1);
-			case "after"      : return isArray( arguments.asset.getAfterAssert() )      ? arguments.asset.getAfterAssert()      : arrayNew(1);
-			case "dependsOn"  : return isArray( arguments.asset.getDependsOnAssert() )  ? arguments.asset.getDependsOnAssert()  : arrayNew(1);
-			case "dependents" : return isArray( arguments.asset.getDependentsAssert() ) ? arguments.asset.getDependentsAssert() : arrayNew(1);
+			case "before"     : return argsAssert.getBeforeAssert() ?: arrayNew(1);
+			case "after"      : return argsAssert.getAfterAssert() ?: arrayNew(1);
+			case "dependsOn"  : return argsAssert.getDependsOnAssert() ?: arrayNew(1);
+			case "dependents" : return argsAssert.getDependentsAssert() ?: arrayNew(1);
 		}
 	}
 

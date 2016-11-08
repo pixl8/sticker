@@ -95,7 +95,7 @@ component {
 			var requestedIncludes = _getRequestStorage();
 
 			if ( !structKeyExists( requestedIncludes, arguments.group ) ){
-				requestedIncludes[ arguments.group ] = createObject( "java", "java.util.LinkedHashMap" ).init();
+				requestedIncludes[ arguments.group ] = StructNew( "ordered" );
 			}
 
 			requestedIncludes[ arguments.group ][ arguments.assetId ] = "";
@@ -120,7 +120,7 @@ component {
 
 		var requestStorage = _getRequestStorage( "data" );
 		if ( !structKeyExists( requestStorage,arguments.group ) ){
-			requestStorage[ arguments.group ] = createObject( "java", "java.util.LinkedHashMap" ).init();
+			requestStorage[ arguments.group ] = StructNew( "ordered" );
 		}
 
 		structAppend( requestStorage[ arguments.group ], arguments.data );
@@ -182,7 +182,7 @@ component {
 		if ( !request.keyExists( _key ) ) {
 			request[ _key ] = {
 				  includes = structNew()
-				, data     = createObject( "java", "java.util.LinkedHashMap" ).init()
+				, data     = StructNew( "ordered" )
 			};
 		}
 
