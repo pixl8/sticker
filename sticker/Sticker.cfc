@@ -129,18 +129,57 @@ component {
 	}
 
 	/**
+	 * I include an adhoc URL that is not contained in a StickerBundle. It will be rendered _after_
+	 * any other assets in its group, and cannot have dependencies.
+	 * This can be used, for example, to link to external scripts or CSS where the URL is dynamic -
+	 * e.g. includes a unique identifier configured by the user.
+	 *
+	 * @url.hint Fully-qualified URL of the CSS or JS asset
+	 */
+	public Sticker function includeUrl( required string url, string group="default" ) {
+		_checkReady();
+
+
+		var requestStorage = _getRequestStorage( "adhoc" );
+		if ( !requestStorage.keyExists( arguments.group ) ){
+			requestStorage[ arguments.group ] = StructNew( "linked" );
+		}
+
+		var expectedArgs = [ "url", "type", "media", "group" ];
+		var adhocUrl     = {
+			  url             = arguments.url
+			, type            = arguments.type  ?: ListLast( arguments.url, "." )
+			, media           = arguments.media ?: ""
+			, extraAttributes = {}
+		};
+		for( var argName in arguments ) {
+			if ( !expectedArgs.findNoCase( argName ) && IsSimpleValue( arguments[ argName ] ) ) {
+				adhocUrl.extraAttributes[ argName ] = arguments[ argName ];
+			}
+		}
+
+		requestStorage[ arguments.group ][ hash( adhocUrl.url ) ] = adhocUrl;
+
+		return this;
+	}
+
+	/**
 	 * I render the collected request includes as HTML includes
 	 * I ensure all includes are rendered in the correct order
 	 *
 	 */
 	public string function renderIncludes( string type, string group="default" ) {
 		var includes      = _getRequestStorage();
+		var adhocUrls     = _getRequestStorage( "adhoc" );
 		var fullSortOrder = _getSortOrder();
 		var ordered       = [];
 		var assets        = _getAssets();
 		var rendered      = "";
+		var renderer      = "";
+		var adhocUrl      = {};
 
-		includes = ( includes[ arguments.group ] ?: {} );
+		includes  = ( includes[  arguments.group ] ?: {} );
+		adhocUrls = ( adhocUrls[ arguments.group ] ?: {} );
 
 		_addIncludeDependencies( includes );
 
@@ -163,6 +202,16 @@ component {
 						rendered &= assets[ asset ].getRenderedInclude() & Chr(13) & Chr(10);
 					}
 				}
+				for( var key in adhocUrls ) {
+					adhocUrl = adhocUrls[ key ];
+					if ( t == adhocUrl.type ) {
+						if ( t == "css" ) {
+							rendered &= new util.IncludeRenderer().renderCssInclude( href=adhocUrl.url, media=adhocUrl.media, extraAttributes=adhocUrl.extraAttributes ) & Chr(13) & Chr(10);
+						} else {
+							rendered &= new util.IncludeRenderer().renderJsInclude( src=adhocUrl.url, extraAttributes=adhocUrl.extraAttributes ) & Chr(13) & Chr(10);
+						}
+					}
+				}
 			}
 		}
 
@@ -181,6 +230,7 @@ component {
 		if ( !request.keyExists( key ) ) {
 			request[ key ] = {
 				  includes = {}
+				, adhoc    = StructNew( "linked" )
 				, data     = StructNew( "linked" )
 			};
 		}
