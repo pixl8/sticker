@@ -48,7 +48,7 @@ A typical layout template that uses Sticker might look like this:
 Installing Sticker
 ==================
 
-Sticker can be downloaded from Forgebox_. 
+Sticker can be downloaded from Forgebox_.
 Once downloaded and unpacked, create a mapping to the sticker directory called **'/sticker'** (not required if you unpacked sticker to the webroot).
 
 Starting up Sticker
@@ -107,7 +107,7 @@ And a :code:`StickerBundle.cfc` file that looks like this:
             bundle.addAsset( id="sitecore", path="/js/*-sitecore.min.js" );
 
             // registering multiple assets at once
-            // notice the idGenerator closure function that can be used to format your asset IDs 
+            // notice the idGenerator closure function that can be used to format your asset IDs
             // based on each matched asset
             bundle.addAssets(
                   directory   = "/css"
@@ -149,7 +149,7 @@ By default, your assets will be rendered in alphabetical order. However, you can
 
 * :code:`before()`
 * :code:`after()`
-* :code:`dependsOn()` 
+* :code:`dependsOn()`
 * :code:`dependents()`
 
 Example:
@@ -200,10 +200,11 @@ Example:
 Including assets in your request and rendering includes
 =======================================================
 
-Once your Sticker instance is configured and loaded, all you have left to do is include assets and render them in your page. There are three methods available:
+Once your Sticker instance is configured and loaded, all you have left to do is include assets and render them in your page. There are four methods available:
 
 * :code:`sticker.include( required string assetId, boolean throwOnError=true, string group="default" )`
 * :code:`sticker.includeData( required struct data, string group="default" )`
+* :code:`sticker.includeUrl( required struct url, string group="default" )`
 * :code:`sticker.renderIncludes( string type, string group="default" )`
 
 See an explanation of each below:
@@ -229,7 +230,22 @@ See an explanation of each below:
 
     <script>var cfrequest={"lookupUrl":"http://ajax.mysite.com/lookup/","resultsPerPage":5}</script>
 
-3. :code:`sticker.renderIncludes( string type, string group="default" )`
+3. :code:`sticker.includeUrl( required struct url, string group="default" )`
+
+  Include URL allows you to include an adhoc or dynamic URL, which is not otherwise defined in a `StickerBundle.cfc`. It may be that you have JS and CSS for a shopping cart system which includes your store name, which is configurable via your app's front end (i.e. not defined in the code).
+
+  Adhoc JS and CSS links will be rendered at the end of their group, after all the ordered assets defined in Sticker. Sticker will not manage any dependencies for ahdoc asset links.
+
+  See the following call and output for an illustration:
+
+  .. code-block:: js
+
+    sticker.includeUrl( url="https://#myShopId#.online-store.com/loader.js" )
+           .includeUrl( url="https://#myShopId#.online-store.com/styling.css" );
+
+  .. code-block:: html
+
+4. :code:`sticker.renderIncludes( string type, string group="default" )`
 
   Renders any includes and data that have been specified with the **include()** and **includeData()** methods.
 
