@@ -111,6 +111,36 @@ component extends="testbox.system.BaseSpec"{
 			);
 		} );
 
+		it( "should append adhoc includes as HTML includes after those defined in Sticker", function(){
+			var sticker = new sticker.Sticker();
+
+			sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
+			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
+			       .load();
+
+			sticker.include( "css-some"              )
+			       .include( "css-subfolder-another" )
+			       .include( "css-subfolder-more"    )
+			       .include( "jquery"                )
+			       .include( "jquery-ui-css"         )
+			       .include( "js-someplugin"         )
+			       .include( "js-subfolder-myfile"   )
+			       .includeUrl( "http://example.com/adhoc.js"  )
+			       .includeUrl( "http://example.com/adhoc.css" );
+
+			expect( sticker.renderIncludes() ).toBe(
+				'<link rel="stylesheet" type="text/css" href="http://jquery.com/jqueryui.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/some.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/subfolder/another.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/subfolder/more.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://example.com/adhoc.css">' & Chr(13) & Chr(10) &
+				'<script src="http://bundle1.com/assets/js/subfolder/fa56e8c-myfile.min.js"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://jquery.com/jquery.js" crossorigin="anonymous" integrity="sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://example.com/adhoc.js"></script>' & Chr(13) & Chr(10)
+			);
+		} );
+
 		it( "should return all the gathered CSS includes as HTML includes in the correct order, when type is set to'CSS' ", function(){
 			var sticker = new sticker.Sticker();
 
@@ -134,6 +164,32 @@ component extends="testbox.system.BaseSpec"{
 			);
 		} );
 
+		it( "should append adhoc CSS includes after the ordered CSS includes, when type is set to'CSS' ", function(){
+			var sticker = new sticker.Sticker();
+
+			sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
+			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
+			       .load();
+
+			sticker.include( "css-some"              )
+			       .include( "css-subfolder-another" )
+			       .include( "css-subfolder-more"    )
+			       .include( "jquery"                )
+			       .include( "jquery-ui-css"         )
+			       .include( "js-someplugin"         )
+			       .include( "js-subfolder-myfile"   )
+			       .includeUrl( "http://example.com/adhoc.js"  )
+			       .includeUrl( "http://example.com/adhoc.css" );
+
+			expect( sticker.renderIncludes( "css" ) ).toBe(
+				'<link rel="stylesheet" type="text/css" href="http://jquery.com/jqueryui.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/some.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/subfolder/another.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://bundle2.com/assets/css/subfolder/more.min.css">' & Chr(13) & Chr(10) &
+				'<link rel="stylesheet" type="text/css" href="http://example.com/adhoc.css">' & Chr(13) & Chr(10)
+			);
+		} );
+
 		it( "should return all the gathered JS includes as HTML includes in the correct order, when type is set to'JS' ", function(){
 			var sticker = new sticker.Sticker();
 
@@ -153,6 +209,31 @@ component extends="testbox.system.BaseSpec"{
 				'<script src="http://bundle1.com/assets/js/subfolder/fa56e8c-myfile.min.js"></script>' & Chr(13) & Chr(10) &
 				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
 				'<script src="http://jquery.com/jquery.js" crossorigin="anonymous" integrity="sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC"></script>' & Chr(13) & Chr(10)
+			);
+		} );
+
+		it( "should append adhoc JS includes after the ordered JS includes, when type is set to'JS' ", function(){
+			var sticker = new sticker.Sticker();
+
+			sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
+			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
+			       .load();
+
+			sticker.include( "css-some"              )
+			       .include( "css-subfolder-another" )
+			       .include( "css-subfolder-more"    )
+			       .include( "jquery"                )
+			       .include( "jquery-ui-css"         )
+			       .include( "js-someplugin"         )
+			       .include( "js-subfolder-myfile"   )
+			       .includeUrl( "http://example.com/adhoc.js"  )
+			       .includeUrl( "http://example.com/adhoc.css" );
+
+			expect( sticker.renderIncludes( type="js" ) ).toBe(
+				'<script src="http://bundle1.com/assets/js/subfolder/fa56e8c-myfile.min.js"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://jquery.com/jquery.js" crossorigin="anonymous" integrity="sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://example.com/adhoc.js"></script>' & Chr(13) & Chr(10)
 			);
 		} );
 
@@ -203,10 +284,13 @@ component extends="testbox.system.BaseSpec"{
 			sticker.includeData( { some="data that will live in default group and should not get rendered when asking for 'top' group" } );
 			sticker.include( assetId="jquery", group="top");
 			sticker.include( assetId="css-some", group="anotherGroup");
+			sticker.includeUrl( url="http://example.com/adhoc.js" , group="top" );
+			sticker.includeUrl( url="http://example.com/adhoc.css", group="anotherGroup" );
 
 			expect( sticker.renderIncludes( group="top" ) ).toBe(
 				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10) &
-				'<script src="http://jquery.com/jquery.js" crossorigin="anonymous" integrity="sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC"></script>' & Chr(13) & Chr(10)
+				'<script src="http://jquery.com/jquery.js" crossorigin="anonymous" integrity="sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC"></script>' & Chr(13) & Chr(10) &
+				'<script src="http://example.com/adhoc.js"></script>' & Chr(13) & Chr(10)
 			);
 		} );
 
