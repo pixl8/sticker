@@ -139,7 +139,6 @@ component {
 	public Sticker function includeUrl( required string url, string group="default" ) {
 		_checkReady();
 
-
 		var requestStorage = _getRequestStorage( "adhoc" );
 		if ( !requestStorage.keyExists( arguments.group ) ){
 			requestStorage[ arguments.group ] = StructNew( "linked" );
@@ -216,6 +215,11 @@ component {
 		}
 
 		return rendered;
+	}
+
+	public struct function getMemento() {
+		var key = _getRequestKey();
+		return request[ key ] ?: {};
 	}
 
 // PRIVATE UTILITY
