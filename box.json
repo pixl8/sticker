@@ -27,9 +27,12 @@
         }
     ],
     "devDependencies":{
-        "testbox":"2.2.0"
+        "testbox":"^2.8.0+191"
     },
     "installPaths":{
-        "testbox":"tests/testbox"
+        "testbox":"tests/testbox/"
+    },
+    "testbox":{
+        "runner":"http://127.0.0.1:9184/runtests.cfm"
     }
 }

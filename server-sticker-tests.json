@@ -1,0 +1,15 @@
+{
+    "name":"stickertests",
+    "openbrowser":false,
+    "trayEnable":false,
+    "web":{
+        "webroot":"tests//",
+        "http":{
+            "port":"9184"
+        }
+    },
+    "JVM":{
+        "heapSize":"1024",
+        "minHeapSize":"256"
+    }
+}
