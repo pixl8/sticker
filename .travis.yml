@@ -7,7 +7,7 @@ install:
 - unzip /tmp/box.zip -d /tmp/bin
 - /tmp/bin/box install
 script:
-- "./test"
+- ./test.sh
 - ant -f build/build.xml -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM -Dbranch=$TRAVIS_BRANCH -Dtag=$TRAVIS_TAG $TARGET
 
 deploy:
