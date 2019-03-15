@@ -16,7 +16,7 @@ Contribution in all forms (raising issues, feature requests, pull requests, docu
 The test suite can be run on unix based systems with:
 
     box install
-    ./test
+    ./test.sh
 
 Pushes to the GitHub repository will trigger a test run and zip file build of the project that will be posted to the [PresideCMS download site](http://downloads.presidecms.com/#!/sticker%2F).
 
