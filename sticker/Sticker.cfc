@@ -147,7 +147,7 @@ component {
 		var expectedArgs = [ "url", "type", "media", "group" ];
 		var adhocUrl     = {
 			  url             = arguments.url
-			, type            = arguments.type  ?: ListLast( arguments.url, "." )
+			, type            = arguments.type  ?: ListLast( ListFirst( arguments.url, "?" ), "." )
 			, media           = arguments.media ?: ""
 			, extraAttributes = {}
 		};
