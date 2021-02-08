@@ -48,7 +48,7 @@ jobs:
         if: "env.PUBLISH == 'true'"
         uses: dominicwatson/github-action-envsubst@v1
         with:
-          files: box.json manifest.json
+          files: box.json
           patterns: $VERSION_NUMBER
         env:
           VERSION_NUMBER: ${{ steps.versiongen.outputs.semver_release_string }}
