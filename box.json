@@ -1,6 +1,7 @@
 {
     "name":"Sticker",
-    "version":"1.2.2",
+    "version":"$VERSION_NUMBER",
+    "location":"$DOWNLOAD_URL",
     "author":"Dominic Watson",
     "createPackageDirectory":true,
     "homepage":"https://github.com/pixl8/sticker",
