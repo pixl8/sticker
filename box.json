@@ -1,5 +1,6 @@
 {
     "name":"Sticker",
+    "type":"modules",
     "version":"$VERSION_NUMBER",
     "location":"$DOWNLOAD_URL",
     "author":"Dominic Watson",
@@ -7,10 +8,10 @@
     "homepage":"https://github.com/pixl8/sticker",
     "documentation":"http://sticker.readthedocs.org/en/latest/",
     "repository":{
-        "type":"github",
+        "type":"git",
         "URL":"https://github.com/pixl8/sticker"
     },
-    "bugs":"",
+    "bugs":"https://github.com/pixl8/sticker/issues",
     "slug":"sticker",
     "shortDescription":"Sticker is a per-request static asset inclusion tool for the Lucee language. Its aim is to create a simple and consistent API for including JavaScript and CSS assets from multiple sources.",
     "description":"Sticker is a per-request static asset inclusion tool for the Lucee language. Its aim is to create a simple and consistent API for including JavaScript and CSS assets from multiple sources.",
@@ -35,5 +36,14 @@
     },
     "testbox":{
         "runner":"http://127.0.0.1:9184/runtests.cfm"
-    }
+    },
+    "ignore":[
+        ".git/*",
+        ".gitignore",
+        ".travis.yml",
+        ".twgit_features_subject",
+        "tests/*",
+        "docs/*",
+        "runtests.sh"
+    ]
 }
