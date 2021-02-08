@@ -60,7 +60,7 @@ component {
 			}
 		}
 
-		asset.type            = arguments.type ?: ListLast( asset.url, "." );
+		asset.type            = arguments.type ?: ListLast( ListFirst( asset.url, "?" ), "." );
 		asset.before          = [];
 		asset.after           = [];
 		asset.dependsOn       = [];
