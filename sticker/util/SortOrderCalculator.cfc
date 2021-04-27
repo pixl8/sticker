@@ -10,7 +10,16 @@ component {
 	 *
 	 * @assets.hint Assets structure
 	 */
-	public array function calculateOrder( required struct assets ) {
+	public array function calculateOrder( required struct assets, boolean allowFromCache=true ) {
+		if ( arguments.allowFromCache ) {
+			var cacheKey  = Hash( SerializeJson( arguments.assets ) );
+			var fromCache = _getFromCache( cacheKey );
+
+			if ( !IsNull( fromCache ) ) {
+				return fromCache;
+			}
+		}
+
 		var assetKeys  = StructKeyArray( arguments.assets );
 		var keyCount   = ArrayLen( assetKeys );
 		var comparisonCache = {};
@@ -41,6 +50,10 @@ component {
 				}
 			}
 		} while ( orderChanged );
+
+		if ( arguments.allowFromCache ) {
+			_putInCache( assetKeys, cacheKey )
+		}
 
 		return assetKeys;
 	}
@@ -74,5 +87,21 @@ component {
 		arguments.comparisonCache[ reverseCacheKey ] = !isBefore;
 
 		return isBefore;
+	}
+
+	private any function _getFromCache( required string cacheKey ) {
+		var filePath = GetTempDirectory() & "/stickercache-#arguments.cacheKey#.json";
+
+		if ( FileExists( filePath ) ) {
+			var rawJson = FileRead( filePath );
+			if ( isJson( rawJson ) ) {
+				return DeserializeJson( rawJson );
+			}
+		}
+	}
+	private void function _putInCache( required array keys, required string cacheKey ) {
+		var filePath = GetTempDirectory() & "/stickercache-#arguments.cacheKey#.json";
+
+		FileWrite( filePath, SerializeJson( arguments.keys ) );
 	}
 }
