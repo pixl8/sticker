@@ -11,12 +11,11 @@ component {
 	 * @assets.hint Assets structure
 	 */
 	public array function calculateOrder( required struct assets ) {
-		var assetKeys  = arguments.assets.keyArray();
-		var keyCount   = assetKeys.len();
-		var newOrder   = "";
+		var assetKeys  = StructKeyArray( arguments.assets );
+		var keyCount   = ArrayLen( assetKeys );
+		var comparisonCache = {};
 
-		assetKeys.sort( "textnocase" );
-		newOrder = Duplicate( assetKeys );
+		ArraySort( assetKeys, "textnocase" );
 
 		// a bubble sort
 		var orderChanged = false;
@@ -24,42 +23,56 @@ component {
 			orderChanged = false;
 			for( var i = 1; i < keyCount; i++ ){
 				for( var n=i+1; n <= keyCount; n++ ){
-					var key1                   = assetKeys[i];
-					var key2                   = assetKeys[n];
-					var pos1                   = newOrder.findNoCase( key1 );
-					var pos2                   = newOrder.findNoCase( key2 );
-					var key1ShouldBeBeforeKey2 = _isBefore( key1, key2, arguments.assets );
+					var key1                   = assetKeys[ i ];
+					var key2                   = assetKeys[ n ];
+					var key1ShouldBeBeforeKey2 = _isBefore( key1, key2, arguments.assets, comparisonCache );
 
 					if ( !IsNull( key1ShouldBeBeforeKey2 ) ) {
-						if ( key1ShouldBeBeforeKey2 && pos1 > pos2 ) {
+						if ( key1ShouldBeBeforeKey2 && i > n ) {
 							orderChanged = true;
-							newOrder.deleteAt( pos1 );
-							newOrder.insertAt( pos2, key1 );
-						} elseif ( !key1ShouldBeBeforeKey2 && pos2 > pos1 ) {
+							ArrayDeleteAt( assetKeys, i );
+							ArrayInsertAt( assetKeys, n, key1 );
+						} else if ( !key1ShouldBeBeforeKey2 && n > i ) {
 							orderChanged = true;
-							newOrder.deleteAt( pos2 );
-							newOrder.insertAt( pos1, key2 );
+							ArrayDeleteAt( assetKeys, n );
+							ArrayInsertAt( assetKeys, i, key2 );
 						}
 					}
 				}
 			}
 		} while ( orderChanged );
 
-		return newOrder;
+		return assetKeys;
 	}
 
 // private utility
-	private any function _isBefore( required string key1, required string key2, required struct assets ) {
+	private any function _isBefore( required string key1, required string key2, required struct assets, required struct comparisonCache ) {
+		var cacheKey = arguments.key1 & "..." & arguments.key2;
+		var reverseCacheKey = arguments.key2 & "..." & arguments.key1;
+
+		if ( StructKeyExists( arguments.comparisonCache, cacheKey ) ) {
+			return arguments.comparisonCache[ cacheKey ] == "null" ? NullValue() : arguments.comparisonCache[ cacheKey ];
+		}
+
 		var key1Befores = arguments.assets[ arguments.key1 ].getBefore();
 		var key1Afters  = arguments.assets[ arguments.key1 ].getAfter();
 		var key2Befores = arguments.assets[ arguments.key2 ].getBefore();
 		var key2Afters  = arguments.assets[ arguments.key2 ].getAfter();
 
-		if ( !key1Befores.findNoCase( arguments.key2 ) && !key1Afters.findNoCase( arguments.key2 ) && !key2Befores.findNoCase( arguments.key1 ) && !key2Afters.findNoCase( arguments.key1) ) {
+		var isBeforeKey1 = ArrayFindNoCase( key1Befores, arguments.key2 );
+		var isAfterKey1  = ArrayFindNoCase( key1Afters, arguments.key2 );
+		var isBeforeKey2 = ArrayFindNoCase( key2Befores, arguments.key1 );
+		var isAfterKey2  = ArrayFindNoCase( key2Afters, arguments.key1 );
+
+		if ( !isBeforeKey1 && !isAfterKey1 && !isBeforeKey2 && !isAfterKey2 ) {
+			arguments.comparisonCache[ cacheKey ] = arguments.comparisonCache[ reverseCacheKey ] = "null";
 			return; // return null - no positive evidence to suggest it is before - leave order as it is
 		}
 
-		return     ( key1Befores.findNoCase( arguments.key2 ) || key2Afters.findNoCase( arguments.key1 ) )
-		       && !( key2Befores.findNoCase( arguments.key1 ) || key1Afters.findNoCase( arguments.key2 ) );
+		var isBefore = ( isBeforeKey1 || isAfterKey2 ) && !( isBeforeKey2 || isAfterKey1 );
+		arguments.comparisonCache[ cacheKey ] = isBefore;
+		arguments.comparisonCache[ reverseCacheKey ] = !isBefore;
+
+		return isBefore;
 	}
 }
