@@ -58,6 +58,23 @@ component extends="testbox.system.BaseSpec"{
 				expect( calculator.calculateOrder( assets=testAssets, allowFromCache=false ) ).toBe( expectedOrder );
 			} );
 
+			it( "should not spin out of control when there are hundres of assets", function(){
+				var testAssetsRaw = DeserializeJson( FileRead( "/resources/lotsOfAssets.json" ) );
+				var expectedOrder = DeserializeJson( FileRead( "/resources/lotsOfAssetsOrder.json" ) );
+				var testAssets = {};
+
+				for( var asset in testAssetsRaw ) {
+					testAssets[ asset.id ] = new sticker.util.Asset( before=asset.before, after=asset.after );
+				}
+
+				var started   = GetTickCount();
+				var ordered   = calculator.calculateOrder( assets=testAssets, allowFromCache=false );
+				var timeTaken = GetTickCount()-started;
+
+				expect( ordered ).toBe( expectedOrder );
+				expect( timeTaken < 30000 ).toBe( true );
+			} );
+
 		} );
 	}
 
