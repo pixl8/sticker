@@ -72,6 +72,20 @@ component extends="testbox.system.BaseSpec"{
 
 			} );
 
+			it( "should avoid outputting executable code for example when data is unsanitized could be vulnerable to xss", function(){
+				var testData  = StructNew( "linked" );
+				var xssAttack = "</SCript><svG/onLoad=prompt(/xss/)>";
+				var escaped   = EncodeForJavaScript( xssAttack );
+
+				testData[ "thisIsAnArray"  ] = [ 1,2,3,4,xssAttack];
+				testData[ "thisIsAnObject" ] = { "thisIsAKey"=xssAttack, "aontherKey"=[1,4,{},false,escaped]};
+				testData[ "interesting"    ] = NullValue();
+				testData[ "vulnerable"    ] = xssAttack
+
+				var expectedResult = '<script>cfrequest={"thisIsAnArray":[1,2,3,4,"five", "#escaped#"],"thisIsAnObject":{"thisIsAKey":"#escaped#","aontherKey":[1,4,{},false,"#escaped#"]},"interesting":null,"vulnerable":"#escaped#"}</script>'
+				expect( renderer.renderData( data=testData ) ).toBe( expectedResult );
+			} );
+
 		} );
 
 		describe( "wrapWithIeConditional()", function(){
