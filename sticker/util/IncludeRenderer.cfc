@@ -59,15 +59,7 @@ component {
 	 * @data.hint Structure of data to be available to javascript
 	 */
 	public string function renderData( required struct data, string variableName="cfrequest" ) {
-		for ( var key in arguments.data ) {
-			var value = arguments.data[ key ];
-
-			if ( isSimpleValue( value ) ) {
-				arguments.data[ key ] = HTMLEditFormat( value );
-			}
-		}
-
-		return '<script>#arguments.variableName#=#SerializeJson( arguments.data )#</script>';
+		return '<script>#arguments.variableName#=#SerializeJson( _sanitizeJsData( arguments.data ) )#</script>';
 	}
 
 	/**
@@ -100,5 +92,26 @@ component {
 			arguments.assets[ assetId ].setRenderedInclude( rendered );
 		}
 		return arguments.assets;
+	}
+
+// HELPERS
+	private any function _sanitizeJsData( any data ) {
+		if ( IsStruct( arguments.data ) ) {
+			for( var key in arguments.data ) {
+				if ( !IsNull( arguments.data[ key ] ) ) {
+					arguments.data[ key ] = _sanitizeJsData( arguments.data[ key ] );
+				}
+			}
+		} else if ( IsArray( arguments.data ) ) {
+			for( var i=1; i<=ArrayLen( arguments.data ); i++ ) {
+				if ( !IsNull( arguments.data[ i ] ) ) {
+					arguments.data[ i ] = _sanitizeJsData( arguments.data[ i ] );
+				}
+			}
+		} else if ( IsSimpleValue( arguments.data ) && ReFindNoCase( "[<>""]+", arguments.data ) ) { // we really only care about ability to escape the json with double quotes and html tags
+			return HTMLEditFormat( arguments.data );
+		}
+
+		return arguments.data;
 	}
 }
