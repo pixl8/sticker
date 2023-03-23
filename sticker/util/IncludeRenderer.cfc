@@ -59,6 +59,14 @@ component {
 	 * @data.hint Structure of data to be available to javascript
 	 */
 	public string function renderData( required struct data, string variableName="cfrequest" ) {
+		for ( var key in arguments.data ) {
+			var value = arguments.data[ key ];
+
+			if ( isSimpleValue( value ) ) {
+				arguments.data[ key ] = HTMLEditFormat( value );
+			}
+		}
+
 		return '<script>#arguments.variableName#=#SerializeJson( arguments.data )#</script>';
 	}
 

@@ -123,10 +123,6 @@ component {
 			requestStorage[ arguments.group ] = StructNew( "linked" );
 		}
 
-		structEach( data, function( key, value ) {
-			data[ key ] = encodeForHTML( value );
-		} );
-
 		requestStorage[ arguments.group ].append( arguments.data );
 
 		return this;
