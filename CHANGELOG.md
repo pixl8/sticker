@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1
+
+* [#17](https://github.com/pixl8/sticker/issues/17) Protect against unsanitized data output as js data
+
 ## 1.3.0
 
 * [#12](https://github.com/pixl8/sticker/issues/12), [#13](https://github.com/pixl8/sticker/issues/13) and [#14](https://github.com/pixl8/sticker/issues/14): performance improvements around recalculating asset sort order

@@ -51,11 +51,11 @@ component extends="testbox.system.BaseSpec"{
 			it( "should return a script block with passed data rendered as a JavaScript object", function(){
 				var testData = StructNew( "linked" );
 
-				testData[ "thisIsAnArray"  ] = [ 1,2,3,4,"five"];
+				testData[ "thisIsAnArray"  ] = [ 1,2,3,4,"five","2023-09-19 12:49:00.000" ];
 				testData[ "thisIsAnObject" ] = { "thisIsAKey"="and a value", "aontherKey"=[1,4,{},false]};
 				testData[ "interesting"    ] = NullValue();
 
-				var expectedResult = '<script>cfrequest={"thisIsAnArray":[1,2,3,4,"five"],"thisIsAnObject":{"thisIsAKey":"and a value","aontherKey":[1,4,{},false]},"interesting":null}</script>'
+				var expectedResult = '<script>cfrequest={"thisIsAnArray":[1,2,3,4,"five","2023-09-19 12:49:00.000"],"thisIsAnObject":{"thisIsAKey":"and a value","aontherKey":[1,4,{},false]},"interesting":null}</script>'
 
 				expect( renderer.renderData( data=testData ) ).toBe( expectedResult );
 			} );
@@ -70,6 +70,20 @@ component extends="testbox.system.BaseSpec"{
 				var expectedResult = '<script>customVariableName={"thisIsAnArray":[1,2,3,4,"five"],"thisIsAnObject":{"thisIsAKey":"and a value","aontherKey":[1,4,{},false]},"interesting":null}</script>'
 				expect( renderer.renderData( data=testData, variableName="customVariableName" ) ).toBe( expectedResult );
 
+			} );
+
+			it( "should avoid outputting executable code for example when data is unsanitized could be vulnerable to xss", function(){
+				var testData  = StructNew( "linked" );
+				var xssAttack = "</SCript><svG/onLoad=prompt(/xss/)>";
+				var escaped   = HTMLEditFormat( xssAttack );
+
+				testData[ "thisIsAnArray"  ] = [ 1,2,3,4,xssAttack];
+				testData[ "thisIsAnObject" ] = { "thisIsAKey"=xssAttack, "aontherKey"=[1,4,{},false,escaped]};
+				testData[ "interesting"    ] = NullValue();
+				testData[ "vulnerable"     ] = xssAttack
+
+				var expectedResult = '<script>cfrequest={"thisIsAnArray":[1,2,3,4,"#escaped#"],"thisIsAnObject":{"thisIsAKey":"#escaped#","aontherKey":[1,4,{},false,"#escaped#"]},"interesting":null,"vulnerable":"#escaped#"}</script>'
+				expect( renderer.renderData( data=testData ) ).toBe( expectedResult );
 			} );
 
 		} );
