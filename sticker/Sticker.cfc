@@ -12,11 +12,12 @@ component {
 	 *
 	 */
 	public Sticker function init() {
-		_setBundleManager( new util.BundleManager( )         );
-		_setAssets       ( {}                                );
-		_setSortOrder    ( []                                );
-		_setReady        ( false                             );
-		_setRequestKey   ( "stickerIncludes_" & CreateUUId() );
+		_setBundleManager  ( new util.BundleManager()          );
+		_setIncludeRenderer( new util.IncludeRenderer()        );
+		_setAssets         ( {}                                );
+		_setSortOrder      ( []                                );
+		_setReady          ( false                             );
+		_setRequestKey     ( "stickerIncludes_" & CreateUUId() );
 
 		return this;
 	}
@@ -45,7 +46,7 @@ component {
 	public Sticker function load() {
 		var assets = _getBundleManager().getAssets();
 
-		new util.IncludeRenderer().addRenderedIncludesToAssets( assets );
+		_getIncludeRenderer().addRenderedIncludesToAssets( assets );
 
 		_setAssets( assets );
 		_setSortOrder( new util.SortOrderCalculator().calculateOrder( assets ) );
@@ -193,7 +194,7 @@ component {
 				if ( t == "js" ) {
 					var data = _getRequestStorage( "data" );
 					if ( data.keyExists( arguments.group ) ) {
-						rendered &= new util.IncludeRenderer().renderData( data[ arguments.group ] ) & Chr(13) & Chr(10);
+						rendered &= _getIncludeRenderer().renderData( data[ arguments.group ] ) & Chr(13) & Chr(10);
 					}
 				}
 				for( var asset in ordered ){
@@ -205,9 +206,9 @@ component {
 					adhocUrl = adhocUrls[ key ];
 					if ( t == adhocUrl.type ) {
 						if ( t == "css" ) {
-							rendered &= new util.IncludeRenderer().renderCssInclude( href=adhocUrl.url, media=adhocUrl.media, extraAttributes=adhocUrl.extraAttributes ) & Chr(13) & Chr(10);
+							rendered &= _getIncludeRenderer().renderCssInclude( href=adhocUrl.url, media=adhocUrl.media, extraAttributes=adhocUrl.extraAttributes ) & Chr(13) & Chr(10);
 						} else {
-							rendered &= new util.IncludeRenderer().renderJsInclude( src=adhocUrl.url, extraAttributes=adhocUrl.extraAttributes ) & Chr(13) & Chr(10);
+							rendered &= _getIncludeRenderer().renderJsInclude( src=adhocUrl.url, extraAttributes=adhocUrl.extraAttributes ) & Chr(13) & Chr(10);
 						}
 					}
 				}
@@ -269,6 +270,13 @@ component {
 	}
 	private void function _setBundleManager( required BundleManager bundleManager ) {
 		_bundleManager = arguments.bundleManager;
+	}
+
+	private any function _getIncludeRenderer() {
+	    return _includeRenderer;
+	}
+	private void function _setIncludeRenderer( required any includeRenderer ) {
+	    _includeRenderer = arguments.includeRenderer;
 	}
 
 	private struct function _getAssets() {
