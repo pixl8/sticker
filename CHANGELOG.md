@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.3
+
+* [#21](https://github.com/pixl8/sticker/issues/21) Explicitly define directoryList sort order
+
+## 1.3.2
+
+* [#19](https://github.com/pixl8/sticker/issues/19) Stop needlessly instantiating util component that can be a single instance
+
 ## 1.3.1
 
 * [#17](https://github.com/pixl8/sticker/issues/17) Protect against unsanitized data output as js data
