@@ -91,7 +91,6 @@ component {
 	) {
 		var rootDir   = ExpandPath( _getRootDirectory() );
 		var directory = rootDir;
-		var matches   = "";
 
 		if ( Left( arguments.directory, 1 ) != "/" ) {
 			directory &= "/";
@@ -99,10 +98,14 @@ component {
 		directory &= arguments.directory;
 
 		if ( DirectoryExists( directory ) ) {
-			var filter = IsSimpleValue( arguments.match ) ? arguments.match : "*";
-			matches = DirectoryList( directory, true, "path", filter );
-			for( var path in matches ){
-				var relativePath = Replace( Replace( path, rootDir, "" ), "\", "/", "all" );
+			var filter       = IsSimpleValue( arguments.match ) ? arguments.match : "*";
+			var matches      = DirectoryList( directory, true, "query", filter, "DateLastModified" );
+			var path         = "";
+			var relativePath = "";
+
+			for( var file in matches ){
+				path         = file.directory & "/" & file.name;
+				relativePath = Replace( Replace( path, rootDir, "" ), "\", "/", "all" );
 
 				if ( !IsClosure( arguments.match ) || arguments.match( relativePath ) ) {
 					addAsset(
