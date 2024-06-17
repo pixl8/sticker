@@ -100,7 +100,7 @@ component {
 
 		if ( DirectoryExists( directory ) ) {
 			var filter = IsSimpleValue( arguments.match ) ? arguments.match : "*";
-			matches = DirectoryList( directory, true, "path", filter );
+			matches = DirectoryList( directory, true, "path", filter, "DateLastModified" );
 			for( var path in matches ){
 				var relativePath = Replace( Replace( path, rootDir, "" ), "\", "/", "all" );
 
