@@ -58,8 +58,12 @@ component {
 	 *
 	 * @data.hint Structure of data to be available to javascript
 	 */
-	public string function renderData( required struct data, string variableName="cfrequest" ) {
-		return '<script>#arguments.variableName#=#SerializeJson( _sanitizeJsData( arguments.data ) )#</script>';
+	public string function renderData( required struct data, string variableName="cfrequest", string nonce="" ) {
+		var attribs = "";
+		if ( Len( Trim( arguments.nonce ) ) ) {
+			attribs = ' nonce="' & EncodeForHtmlAttribute( arguments.nonce ) & '"';
+		}
+		return '<script#attribs#>#arguments.variableName#=#SerializeJson( _sanitizeJsData( arguments.data ) )#</script>';
 	}
 
 	/**

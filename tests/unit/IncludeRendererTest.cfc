@@ -86,6 +86,12 @@ component extends="testbox.system.BaseSpec"{
 				expect( renderer.renderData( data=testData ) ).toBe( expectedResult );
 			} );
 
+			it( "should include nonce attribute when passed", function(){
+				var testData = StructNew( "linked" );
+				var expectedResult = '<script nonce="1234567890">cfrequest={}</script>'
+				expect( renderer.renderData( data=testData, nonce="1234567890" ) ).toBe( expectedResult );
+			} );
+
 		} );
 
 		describe( "wrapWithIeConditional()", function(){
