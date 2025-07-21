@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.4
+
+* [#22](https://github.com/pixl8/sticker/issues/22) Add support for outputting nonce attribute on inline script tags for CSP
+
 ## 1.3.3
 
 * [#21](https://github.com/pixl8/sticker/issues/21) Explicitly define directoryList sort order
