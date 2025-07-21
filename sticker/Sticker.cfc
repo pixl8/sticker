@@ -168,7 +168,7 @@ component {
 	 * I ensure all includes are rendered in the correct order
 	 *
 	 */
-	public string function renderIncludes( string type, string group="default" ) {
+	public string function renderIncludes( string type, string group="default", string nonce="" ) {
 		var includes      = _getRequestStorage();
 		var adhocUrls     = _getRequestStorage( "adhoc" );
 		var fullSortOrder = _getSortOrder();
@@ -194,7 +194,7 @@ component {
 				if ( t == "js" ) {
 					var data = _getRequestStorage( "data" );
 					if ( data.keyExists( arguments.group ) ) {
-						rendered &= _getIncludeRenderer().renderData( data[ arguments.group ] ) & Chr(13) & Chr(10);
+						rendered &= _getIncludeRenderer().renderData( data=data[ arguments.group ], nonce=arguments.nonce ) & Chr(13) & Chr(10);
 					}
 				}
 				for( var asset in ordered ){

@@ -255,6 +255,24 @@ component extends="testbox.system.BaseSpec"{
 			);
 		} );
 
+		it( "should include nonce attribute when passed to renderIncludes()", function(){
+			var sticker = new sticker.Sticker();
+
+			sticker.addBundle( rootDirectory="/resources/bundles/bundle1/", rootUrl="http://bundle1.com/assets" )
+			       .addBundle( rootDirectory="/resources/bundles/bundle2/", rootUrl="http://bundle2.com/assets" )
+			       .load();
+
+			sticker.include( "js-someplugin" )
+			       .includeData( { key1="key1" } )
+			       .includeData( { key2="key2" } )
+			       .includeData( { key3="key3" } );
+
+			expect( sticker.renderIncludes( type="js", nonce="1234567890" ) ).toBe(
+				'<script nonce="1234567890">cfrequest={"key1":"key1","key2":"key2","key3":"key3"}</script>' & Chr(13) & Chr(10) &
+				'<script src="http://bundle2.com/assets/js/someplugin.min.js"></script>' & Chr(13) & Chr(10)
+			);
+		} );
+
 		it( "should render any dependencies that have not been explicity included", function(){
 			var sticker = new sticker.Sticker();
 
